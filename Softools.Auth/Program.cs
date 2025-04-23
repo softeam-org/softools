@@ -1,8 +1,9 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using Softools.Usuarios;
+using Softools.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +15,14 @@ builder.AddServiceDefaults();
 // Config do servidor
 builder.Services.AddFastEndpoints()
     .SwaggerDocument();
-builder.Services.AddDbContext<UsuariosDbContext>(options =>
+builder.Services.AddDbContext<AuthDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("usuariosdb"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("authdb"));
 });
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -27,10 +32,10 @@ app.UseFastEndpoints();
 // Documentação
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi(c => c.Path = "usuarios/openapi/{documentName}.json");
-    app.MapScalarApiReference("/usuarios/docs", c =>
+    app.UseOpenApi(c => c.Path = "auth/openapi/{documentName}.json");
+    app.MapScalarApiReference("/auth/docs", c =>
     {
-        c.OpenApiRoutePattern = "usuarios/openapi/{documentName}.json";
+        c.OpenApiRoutePattern = "auth/openapi/{documentName}.json";
     });
 }
 
@@ -38,7 +43,7 @@ if (app.Environment.IsDevelopment())
 // Causará erro pois não temos migrations configuradas ainda.
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
     dbContext.Database.Migrate();
 }
 app.UseHttpsRedirection();
