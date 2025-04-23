@@ -1,3 +1,8 @@
-var builder = DistributedApplication.CreateBuilder(args);
+using Projects;
+using Softools.AppHost;
 
-builder.Build().Run();
+var orquestrador = new Orquestrador();
+
+orquestrador.AdicionarApi<Softools_Projetos>("projetos");
+
+await orquestrador.Build().RunAsync();
