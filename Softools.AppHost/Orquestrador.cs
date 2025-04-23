@@ -5,6 +5,10 @@ namespace Softools.AppHost;
 /// </summary>
 public class Orquestrador
 {
+    
+    /// <summary>
+    /// Builder da aplicação distribuída, usado para registrar e configurar recursos e serviços.
+    /// </summary>
     public IDistributedApplicationBuilder Builder { get; private set; }
 
     private Dictionary<string, IResourceBuilder<ProjectResource>> servicos = new();
@@ -21,6 +25,15 @@ public class Orquestrador
             .WithManagementPlugin();
     }
 
+    /// <summary>
+    /// Adiciona uma API ao orquestrador, com configuração opcional de banco de dados e dependências.
+    /// </summary>
+    /// <typeparam name="T">Tipo que implementa <see cref="IProjectMetadata"/>.</typeparam>
+    /// <param name="nome">Nome do serviço.</param>
+    /// <param name="recursos">Recursos opcionais a serem configurados, como banco de dados PostgreSQL.</param>
+    /// <param name="dependencias">Lista de nomes de serviços dos quais esta API depende.</param>
+    /// <returns>Instância atual de <see cref="Orquestrador"/> para encadeamento.</returns>
+    /// <exception cref="InvalidOperationException">Lançada quando uma dependência informada não foi registrada.</exception>
     public Orquestrador AdicionarApi<T>(string nome, Recursos recursos = Recursos.Nenhum, params string[] dependencias)
         where T : IProjectMetadata, new()
     {
@@ -51,6 +64,12 @@ public class Orquestrador
         return this;
     }
     
+    /// <summary>
+    /// Adiciona o API Gateway ao orquestrador.
+    /// </summary>
+    /// <typeparam name="T">Tipo que implementa <see cref="IProjectMetadata"/>.</typeparam>
+    /// <param name="nome">Nome do gateway.</param>
+    /// <returns>Instância atual de <see cref="Orquestrador"/> para encadeamento.</returns>
     public Orquestrador AdicionarApiGateway<T>(string nome) where T : IProjectMetadata, new()
     {
         gateway = Builder.AddProject<T>(nome);
@@ -62,6 +81,11 @@ public class Orquestrador
         return this;
     }
 
+    /// <summary>
+    /// Constrói e retorna a aplicação distribuída configurada.
+    /// </summary>
+    /// <returns>Instância de <see cref="DistributedApplication"/>.</returns>
+    /// <exception cref="InvalidOperationException">Lançada se o API Gateway não tiver sido configurado.</exception>
     public DistributedApplication Build()
     {
         if (gateway == null) 

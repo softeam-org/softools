@@ -1,0 +1,6 @@
+@Softools.Usuarios_HostAddress = http://localhost:5189
+
+GET {{Softools.Usuarios_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
