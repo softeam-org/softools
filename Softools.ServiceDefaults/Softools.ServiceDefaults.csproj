@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Aspire.RabbitMQ.Client" Version="9.2.0" />
     <PackageReference Include="FastEndpoints" Version="6.0.0" />
     <PackageReference Include="FastEndpoints.Security" Version="6.0.0" />
 

@@ -42,6 +42,10 @@ public static class Extensions
                                    "Could not find jwt secret environment variable");
             })
             .AddAuthorization();
+        
+        builder.Services.AddProblemDetails();
+        
+        builder.AddRabbitMQClient("messaging");
 
         return builder;
     }
