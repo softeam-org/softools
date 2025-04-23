@@ -8,16 +8,26 @@ public class Orquestrador
     public IDistributedApplicationBuilder Builder { get; private set; }
 
     private Dictionary<string, IResourceBuilder<ProjectResource>> servicos = new();
+    private IResourceBuilder<RabbitMQServerResource> rabbitmq;
 
     public Orquestrador()
     {
         Builder = DistributedApplication.CreateBuilder();
+        
+        var rmqUsername = Builder.AddParameter("RabbitMqUsername");
+        var rmqPassword = Builder.AddParameter("RabbitMqPassword");
+        rabbitmq = Builder.AddRabbitMQ("messaging", rmqUsername, rmqPassword)
+            .WithManagementPlugin();
     }
 
     public Orquestrador AdicionarApi<T>(string nome, Recursos recursos = Recursos.Nenhum, params string[] dependencias)
         where T : IProjectMetadata, new()
     {
         var servico = Builder.AddProject<T>(nome);
+        
+        // RabbitMQ
+        servico.WithReference(rabbitmq)
+            .WaitFor(rabbitmq);
 
         servicos.Add(nome, servico);
 
