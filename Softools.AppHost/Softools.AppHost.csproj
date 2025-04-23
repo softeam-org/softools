@@ -20,6 +20,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\Softools.Gateway\Softools.Gateway.csproj" />
     <ProjectReference Include="..\Softools.Projetos\Softools.Projetos.csproj" />
   </ItemGroup>
 

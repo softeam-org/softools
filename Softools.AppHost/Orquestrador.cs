@@ -9,6 +9,7 @@ public class Orquestrador
 
     private Dictionary<string, IResourceBuilder<ProjectResource>> servicos = new();
     private IResourceBuilder<RabbitMQServerResource> rabbitmq;
+    private IResourceBuilder<ProjectResource> gateway;
 
     public Orquestrador()
     {
@@ -49,7 +50,32 @@ public class Orquestrador
 
         return this;
     }
+    
+    public Orquestrador AdicionarApiGateway<T>(string nome) where T : IProjectMetadata, new()
+    {
+        gateway = Builder.AddProject<T>(nome);
+        
+        // RabbitMQ
+        gateway.WithReference(rabbitmq)
+            .WaitFor(rabbitmq);
 
+        return this;
+    }
+
+    public DistributedApplication Build()
+    {
+        if (gateway == null) 
+        {
+            throw new InvalidOperationException("Gateway not set up");
+        }
+
+        foreach (var servico in servicos.Values)
+        {
+            gateway.WithReference(servico)
+                .WaitFor(servico);
+        }
+        return Builder.Build();
+    }
     private void ConfigurarPostgres<T>(string nome, IResourceBuilder<ProjectResource> servico) where T : IProjectMetadata, new()
     {
         var nomeDb = $"{nome.ToLowerInvariant()}db";
@@ -61,8 +87,4 @@ public class Orquestrador
             .WaitFor(db);
     }
 
-    public DistributedApplication Build()
-    {
-        return Builder.Build();
-    }
 }
