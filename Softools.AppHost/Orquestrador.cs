@@ -21,6 +21,11 @@ public class Orquestrador
 
         servicos.Add(nome, servico);
 
+        if (recursos.HasFlag(Recursos.BancoDeDadosPostgreSQL))
+        {
+            ConfigurarPostgres<T>(nome, servico);
+        }
+
         foreach (var dependencia in dependencias)
         {
             if (!servicos.ContainsKey(dependencia))
@@ -33,6 +38,17 @@ public class Orquestrador
         }
 
         return this;
+    }
+
+    private void ConfigurarPostgres<T>(string nome, IResourceBuilder<ProjectResource> servico) where T : IProjectMetadata, new()
+    {
+        var nomeDb = $"{nome.ToLowerInvariant()}db";
+        var postgres = Builder.AddPostgres($"{nome}pg")
+            .WithEnvironment("POSTGRES_DB", nomeDb)
+            .WithDataVolume(isReadOnly: false);
+        var db = postgres.AddDatabase(nomeDb);
+        servico.WithReference(db)
+            .WaitFor(db);
     }
 
     public DistributedApplication Build()
