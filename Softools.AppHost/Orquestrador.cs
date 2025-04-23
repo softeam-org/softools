@@ -43,6 +43,8 @@ public class Orquestrador
         servico.WithReference(rabbitmq)
             .WaitFor(rabbitmq);
 
+        servico.WithEnvironment("JwtSecret", Builder.Configuration["Jwt:Key"]);
+        
         servicos.Add(nome, servico);
 
         if (recursos.HasFlag(Recursos.BancoDeDadosPostgreSQL))

@@ -1,3 +1,4 @@
+using FastEndpoints.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,15 @@ public static class Extensions
             // Turn on service discovery by default
             http.AddServiceDiscovery();
         });
+        
+        
+        builder.Services.AddAuthenticationJwtBearer(s =>
+            {
+                s.SigningKey = Environment.GetEnvironmentVariable("JwtSecret") ??
+                               throw new ArgumentNullException("JwtSecret",
+                                   "Could not find jwt secret environment variable");
+            })
+            .AddAuthorization();
 
         return builder;
     }
