@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Softools.Usuarios", "Softoo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Softools.Auth", "Softools.Auth\Softools.Auth.csproj", "{6345B4D5-93D9-42CB-9984-5B8FB575AFB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Softools.Documentos", "Softools.Documentos\Softools.Documentos.csproj", "{15792597-EF62-4780-B2A0-11E059E3D21B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{6345B4D5-93D9-42CB-9984-5B8FB575AFB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6345B4D5-93D9-42CB-9984-5B8FB575AFB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6345B4D5-93D9-42CB-9984-5B8FB575AFB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15792597-EF62-4780-B2A0-11E059E3D21B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15792597-EF62-4780-B2A0-11E059E3D21B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15792597-EF62-4780-B2A0-11E059E3D21B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15792597-EF62-4780-B2A0-11E059E3D21B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
