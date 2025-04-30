@@ -82,6 +82,35 @@ public class Orquestrador
 
         return this;
     }
+    
+    /// <summary>
+    /// Configura um aplicativo NPM com o nome e dependências fornecidos.
+    /// </summary>
+    /// <param name="name">O nome do aplicativo NPM.</param>
+    /// <param name="path">O caminho do sistema de arquivos para o aplicativo NPM.</param>
+    /// <param name="script">O script a ser executado para o aplicativo NPM.</param>
+    /// <param name="dependencies">As dependências de serviço para este aplicativo NPM.</param>
+    /// <exception cref="InvalidOperationException">Lançada quando uma dependência especificada não existe.</exception>
+    public Orquestrador AdicionarAppNpm(string name, string path, string script, params string[] dependencies)
+    {
+        var app = Builder.AddNpmApp(name, path, script)
+            .WithHttpEndpoint(env: "PORT")
+            .WithExternalHttpEndpoints();
+
+        foreach (var dependency in dependencies)
+        {
+            if (!servicos.ContainsKey(dependency))
+            {
+                throw new InvalidOperationException($"Serviço {dependency} não encontrado");
+            }
+
+            app.WithReference(servicos[dependency])
+                .WaitFor(servicos[dependency]);
+        }
+
+        return this;
+    }
+
 
     /// <summary>
     /// Constrói e retorna a aplicação distribuída configurada.
