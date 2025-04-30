@@ -3,10 +3,12 @@ using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Softools.Documentos;
+using Softools.Documentos.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<TemplateService>();
 
 // Setup para integração com Aspire
 builder.AddServiceDefaults();
