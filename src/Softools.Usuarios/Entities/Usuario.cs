@@ -10,6 +10,6 @@ public class Usuario
         CPF = cpf;
     }
     public Guid Id { get; init; }
-    public string Nome { get; private set; } = string.Empty;
-    public string CPF { get; private set; } = string.Empty;
+    public string Nome { get; set; } = string.Empty;
+    public string CPF { get; set; } = string.Empty;
 }
