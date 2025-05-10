@@ -35,8 +35,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Aplicar migrações automaticamente
-// Causará erro pois não temos migrations configuradas ainda.
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
