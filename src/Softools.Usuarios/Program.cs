@@ -2,7 +2,8 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using Softools.Usuarios;
+using Softools.Usuarios.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

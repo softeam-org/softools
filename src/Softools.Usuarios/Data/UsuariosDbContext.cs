@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace Softools.Usuarios.Data;
+
 using Softools.Usuarios.Entities;
 public class UsuariosDbContext : DbContext
 {
