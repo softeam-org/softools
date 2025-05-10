@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Softools.Usuarios;
-
+namespace Softools.Usuarios.Data;
+using Softools.Usuarios.Entities;
 public class UsuariosDbContext : DbContext
 {
     public DbSet<Usuario> Usuarios { get; set; }
