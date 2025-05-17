@@ -16,14 +16,22 @@ public class GetAllUsuarios : EndpointWithoutRequest<List<Usuario>>
     {
         Get("/usuarios");
         Description(b => b
-            .Produces<List<Usuario>>(200, "aplication/json")
-            .WithTags("Usuarios"));
+            .Produces<List<Usuario>>(200, "application/json") 
+            .WithTags("Usuarios")
+            .RequireAuthorization());
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
         var usuarios = await _context.Usuarios
+            .AsNoTracking() // Recomendado para operações somente leitura
             .ToListAsync(ct);
+
+        if (!usuarios.Any())
+        {
+            await SendNoContentAsync(ct); // 204 se vazio
+            return;
+        }
 
         await SendAsync(usuarios, cancellation: ct);
     }

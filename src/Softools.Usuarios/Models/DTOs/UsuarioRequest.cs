@@ -1,5 +1,3 @@
-namespace Softools.Usuarios.Entities;
-
 public class UsuarioRequest
 {
     public string Nome { get; set; } = string.Empty;
