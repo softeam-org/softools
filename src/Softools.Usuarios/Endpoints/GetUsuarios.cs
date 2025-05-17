@@ -24,12 +24,12 @@ public class GetUsuarios : EndpointWithoutRequest<List<Usuario>>
     public override async Task HandleAsync(CancellationToken ct)
     {
         var usuarios = await _context.Usuarios
-            .AsNoTracking() // Recomendado para operações somente leitura
+            .AsNoTracking()
             .ToListAsync(ct);
 
         if (!usuarios.Any())
         {
-            await SendNoContentAsync(ct); // 204 se vazio
+            await SendNoContentAsync(ct);
             return;
         }
 

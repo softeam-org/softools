@@ -46,8 +46,9 @@ public class UpdateUsuario : Endpoint<UpdateUsuarioRequest, UsuarioResponse>
         }
 
 
-        usuario.Nome = req.Nome;
-        usuario.CPF = req.CPF;
+        if (req.Nome is not null) usuario.Nome = req.Nome;
+
+        if (req.CPF is not null) usuario.CPF = req.CPF;
 
 
         await _context.SaveChangesAsync(ct);
