@@ -33,18 +33,18 @@ public static class Extensions
             // Turn on service discovery by default
             http.AddServiceDiscovery();
         });
-        
-        
+
+
         builder.Services.AddAuthenticationJwtBearer(s =>
             {
-                s.SigningKey = Environment.GetEnvironmentVariable("JwtSecret") ??
-                               throw new ArgumentNullException("JwtSecret",
-                                   "Could not find jwt secret environment variable");
+                s.SigningKey = Environment.GetEnvironmentVariable("JWT_SECRET") 
+                   ?? builder.Configuration["JwtSecret"]
+                   ?? throw new InvalidOperationException("JWT Secret não configurado");
             })
             .AddAuthorization();
-        
+
         builder.Services.AddProblemDetails();
-        
+
         builder.AddRabbitMQClient("messaging");
 
         return builder;
@@ -131,7 +131,7 @@ public static class Extensions
                     });
                     await context.Response.WriteAsync(result);
                 }
-            });;
+            }); ;
 
             // Only health checks tagged with the "live" tag must pass for app to be considered alive
             app.MapHealthChecks("/alive", new HealthCheckOptions
