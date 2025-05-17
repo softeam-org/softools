@@ -3,11 +3,11 @@ using Softools.Usuarios.Entities;
 using Microsoft.EntityFrameworkCore;
 using Softools.Usuarios.Data;
 
-public class GetAllUsuarios : EndpointWithoutRequest<List<Usuario>>
+public class GetUsuarios : EndpointWithoutRequest<List<Usuario>>
 {
     private readonly UsuariosDbContext _context;
 
-    public GetAllUsuarios(UsuariosDbContext context)
+    public GetUsuarios(UsuariosDbContext context)
     {
         _context = context;
     }
@@ -15,10 +15,10 @@ public class GetAllUsuarios : EndpointWithoutRequest<List<Usuario>>
     public override void Configure()
     {
         Get("/usuarios");
+        AllowAnonymous();
         Description(b => b
-            .Produces<List<Usuario>>(200, "application/json") 
-            .WithTags("Usuarios")
-            .RequireAuthorization());
+            .Produces<List<Usuario>>(200, "application/json")
+            .WithTags("Usuarios"));
     }
 
     public override async Task HandleAsync(CancellationToken ct)
