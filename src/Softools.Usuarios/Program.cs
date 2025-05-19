@@ -1,19 +1,30 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using Softools.Usuarios;
+using Softools.Usuarios.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+// 1. Configuração do Aspire (inclui JWT, OpenTelemetry, Health Checks)
+builder.AddServiceDefaults(); // <- Já inclui a configuração JWT do Extensions.cs
 
-// Setup para integração com Aspire
-builder.AddServiceDefaults();
-
-// Config do servidor
+// 2. Configuração do FastEndpoints e Swagger
 builder.Services.AddFastEndpoints()
-    .SwaggerDocument();
+    .SwaggerDocument(o =>
+    {
+        o.DocumentSettings = s =>
+        {
+            s.DocumentName = "v1";
+            s.Title = "API de Usuários";
+            s.Version = "1.0";
+        };
+
+
+    });
+
+// 3. Banco de Dados (PostgreSQL)
 builder.Services.AddDbContext<UsuariosDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("usuariosdb"));
@@ -21,26 +32,25 @@ builder.Services.AddDbContext<UsuariosDbContext>(options =>
 
 var app = builder.Build();
 
-// Middlewares
+// 4. Middlewares
+app.UseHttpsRedirection();
+app.UseAuthentication(); 
+app.UseAuthorization();
 app.UseFastEndpoints();
 
-// Documentação
+// 5. Documentação (Swagger + Scalar) - Apenas em Development
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi(c => c.Path = "usuarios/openapi/{documentName}.json");
-    app.MapScalarApiReference("/usuarios/docs", c =>
-    {
-        c.OpenApiRoutePattern = "usuarios/openapi/{documentName}.json";
-    });
+    app.UseOpenApi(); // Padrão: /swagger/{documentName}/swagger.json
+    app.UseSwaggerUi();
+    app.MapScalarApiReference("/docs");
 }
 
-// Aplicar migrações automaticamente
-// Causará erro pois não temos migrations configuradas ainda.
+// 6. Migração do Banco de Dados Automática
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
     dbContext.Database.Migrate();
 }
-app.UseHttpsRedirection();
 
 app.Run();
