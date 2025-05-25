@@ -10,4 +10,5 @@ public class DocumentosDbContext : DbContext
     }
     
     public DbSet<Documento> Documentos { get; set; }
+    public DbSet<TemplateDocumento> Templates { get; set; }
 }
