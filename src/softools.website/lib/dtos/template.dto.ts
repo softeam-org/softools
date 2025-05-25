@@ -4,3 +4,8 @@ export interface TemplateDto {
     caminho: string;
     descricao: string;
 }
+
+export interface CamposDto {
+    nomeTemplate: string;
+    campos: string[];
+}

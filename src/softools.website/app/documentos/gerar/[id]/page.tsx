@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { fetchCampos } from "@/lib/services/template.service";
+import { fetchCampos, gerarDocumento } from "@/lib/services/template.service";
+import { CamposDto } from "@/lib/dtos/template.dto";
 
 
 export default function GerarDocumentoPage() {
@@ -10,7 +11,7 @@ export default function GerarDocumentoPage() {
   const idParam = params.id;
   const templateId = Number(idParam);
 
-  const [campos, setCampos] = useState<string[]>([]);
+  const [campos, setCampos] = useState<CamposDto>();
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [loadingCampos, setLoadingCampos] = useState(true);
   const [submitStatus, setSubmitStatus] = useState<string | null>(null);
@@ -22,7 +23,7 @@ export default function GerarDocumentoPage() {
         .then((campos) => {
           setCampos(campos);
           const initialData: Record<string, string> = {};
-          campos.forEach((campo) => (initialData[campo] = ""));
+          campos.campos.forEach((campo) => (initialData[campo] = ""));
           setFormData(initialData);
         })
         .finally(() => setLoadingCampos(false));
@@ -36,32 +37,43 @@ export default function GerarDocumentoPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const res = await fetch("/api/your-post-endpoint", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ templateId, data: formData }),
-      });
-      if (!res.ok) throw new Error("Submit failed");
-      setSubmitStatus("Form submitted successfully!");
+      const blob = await gerarDocumento(templateId, formData);
+  
+      const filename =
+        blob.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          ? "documento.docx"
+          : "download.pdf";
+  
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+  
+      setSubmitStatus("Documento gerado com sucesso!");
     } catch (err) {
-      setSubmitStatus("Error submitting form.");
+      setSubmitStatus("Erro ao gerar documento.");
       console.error(err);
     }
   }
+  
 
   if (isNaN(templateId)) return <p>ID inválido.</p>;
 
   return (
     <main className="min-h-screen p-8 bg-[var(--background)] text-[var(--foreground)] max-w-3xl mx-auto">
       <h1 className="text-4xl font-bold mb-8 border-b border-[var(--softeam4)] pb-4">
-        Gerar Documento - Template #{templateId}
+        Gerar Documento - {campos?.nomeTemplate}
       </h1>
 
       {loadingCampos && <p>Carregando campos...</p>}
 
-      {!loadingCampos && campos.length > 0 && (
+      {!loadingCampos && campos!.campos.length > 0 && (
         <form onSubmit={handleSubmit} className="space-y-4">
-          {campos.map((campo) => (
+          {campos!.campos.map((campo) => (
             <div key={campo}>
               <label htmlFor={campo} className="block mb-1 font-medium capitalize">
                 {campo}
@@ -86,7 +98,7 @@ export default function GerarDocumentoPage() {
         </form>
       )}
 
-      {!loadingCampos && campos.length === 0 && <p>Nenhum campo encontrado para este template.</p>}
+      {!loadingCampos && campos!.campos.length === 0 && <p>Nenhum campo encontrado para este template.</p>}
 
       {submitStatus && (
         <p className="mt-6 text-center font-semibold text-[var(--softeam4)]">{submitStatus}</p>

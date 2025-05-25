@@ -1,8 +1,8 @@
-import { TemplateDto } from "@/lib/dtos/template.dto";
+import { CamposDto, TemplateDto } from "@/lib/dtos/template.dto";
 
 export async function fetchTemplates(): Promise<TemplateDto[]> {
     try {
-      const response = await fetch("/api/templates");
+      const response = await fetch("http://localhost:5124/templates");
       if (!response.ok) {
         throw new Error("Failed to fetch templates");
       }
@@ -14,17 +14,31 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
     }
   }
 
-  export async function fetchCampos(id: number): Promise<string[]> {
-    return ["Foo", "Bar"];
+  export async function fetchCampos(id: number): Promise<CamposDto> {
     try {
-      const response = await fetch(`https://localhost:7132/templates/campos/${id}`);
+      const response = await fetch(`http://localhost:5124/templates/campos/${id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch campos");
       }
-      const data = (await response.json()) as string[];
+      const data = (await response.json()) as CamposDto;
       return data;
     } catch (error) {
       console.error("Error fetching campos:", error);
-      return [];
+      return {
+        nomeTemplate: "N/A",
+        campos: [],
+      };
     }
+  }
+
+  export async function gerarDocumento(templateId: number, formData: Record<string, string>): Promise<Blob> {
+    const res = await fetch("http://localhost:5124/documentos/gerar/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ templateId, campos: formData }),
+    });
+  
+    if (!res.ok) throw new Error("Submit failed");
+  
+    return await res.blob();
   }
