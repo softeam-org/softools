@@ -2,20 +2,20 @@
 
 :root {
   --softeam1: #072763;
+  --softeam2: #1C58A8;
+  --softeam3: #1074BC;
+  --softeam4: #94D2FF;
+  --softeam5: #ededed;
+
+  --background: var(--softeam1);
+  --foreground: var(--softeam5);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
 }
 
 body {
