@@ -46,25 +46,27 @@ export default function TemplateListPage() {
           placeholder="Buscar templates..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-3 rounded border border-[var(--softeam4)] text-black focus:outline-none focus:ring-2 focus:ring-[var(--softeam2)]"
+          className="w-full p-3 rounded border border-[var(--softeam4)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--softeam2)]"
         />
       </div>
 
       <section className="max-w-3xl mx-auto space-y-8">
         {filteredTemplates.length > 0 ? (
-          filteredTemplates.map(({ id, nome, caminho, descricao }) => (
+          filteredTemplates.map(({ id, nome, descricao }) => (
             <article
               key={id}
-              className="relative p-6 rounded-lg border border-[var(--softeam4)] bg-[var(--softeam5)] text-black shadow-lg"
+              className="relative p-6 rounded-lg border border-[var(--softeam3)] bg-[var(--softeam3)] text-[var(--foreground)] shadow-lg"
             >
               <a
-                href={caminho}
+                href={`/documentos/gerar/${id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="absolute top-4 right-4 text-[var(--softeam2)] font-semibold hover:underline"
-              >
-                Abrir Template
-              </a>
+                className="absolute top-4 right-4 text-[var(--softeam4)] hover:text-[var(--softeam5)]"
+                aria-label="Abrir Template"
+                >
+                <span className="material-icons">open_in_new</span>
+                </a>
+
 
               <h2 className="text-2xl font-semibold mb-2">{nome}</h2>
               <p className="mb-4">{descricao}</p>
