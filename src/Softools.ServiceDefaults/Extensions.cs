@@ -46,8 +46,32 @@ public static class Extensions
         builder.Services.AddProblemDetails();
 
         builder.AddRabbitMQClient("messaging");
+        
+        
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowLocalhost", policy =>
+            {
+                policy.SetIsOriginAllowed(origin =>
+                        !string.IsNullOrEmpty(origin) &&
+                        (origin.StartsWith("http://localhost") || origin.StartsWith("https://localhost")))
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
 
         return builder;
+    }
+    
+    public static WebApplication UseServiceDefaults(this WebApplication app)
+    {
+        // Enable CORS for localhost
+        app.UseCors("AllowLocalhost");
+
+        // Enable health checks
+        app.MapDefaultEndpoints();
+
+        return app;
     }
 
     public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)

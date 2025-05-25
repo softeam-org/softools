@@ -25,6 +25,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 var app = builder.Build();
+app.UseServiceDefaults();
 
 // Middlewares
 app.UseFastEndpoints();
