@@ -1,11 +1,12 @@
 "use client";
 
 import { credits } from "@/lib/data/credits";
+import { socialSeeds } from "@/lib/dtos/socials.dto";
 import Image from "next/image";
 
 export default function CreditsPage() {
   return (
-    <main className="min-h-screen p-8 bg-[var(--background)] text-[var(--foreground)]">
+    <main className="min-h-screen p-8 bg-[var(--softeam1)] text-[var(--foreground)]">
       <h1 className="text-4xl font-bold mb-6 border-b border-[var(--softeam4)] pb-4 max-w-3xl mx-auto">
         Créditos
       </h1>
@@ -22,33 +23,37 @@ export default function CreditsPage() {
 
 
       <section className="max-w-3xl mx-auto space-y-12">
-        {credits.map(({ tool, contributors }) => (
-          <div key={tool}>
-            <h2 className="text-2xl font-semibold mb-4 border-b border-[var(--softeam4)] pb-2">
-              {tool}
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {contributors.map(({ name, linkedin }) => (
-                <a
-                  key={name}
-                  href={linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center p-4 border border-[var(--softeam3)] rounded-lg bg-[var(--softeam3)] hover:bg-[var(--softeam4)] transition"
-                >
-                  <div>
-                    <p className="text-lg font-medium">{name}</p>
-                    <p className="text-sm text-[var(--softeam5)]">LinkedIn</p>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
+        
 
-<h2 className="text-2xl font-semibold mb-4 border-b border-[var(--softeam4)] pb-2">
-              E todos os outros que fizeram parte dessa jornada, obrigado 💙
-            </h2>
+            <h2 className="text-2xl font-semibold mb-4 border-b border-[var(--softeam4)] pb-2">
+              Equipe 2025
+            </h2><div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  {socialSeeds.map(({ name, linkedin, fotoPerfil, cargo }) => (
+    <div
+      key={name}
+      className="bg-[var(--softeam4)] border rounded-lg p-4 text-center shadow-md"
+    >
+      <img
+        src={fotoPerfil}
+        alt={name}
+        className="w-20 h-20 mx-auto rounded-full mb-4"
+      />
+      <h3 className="text-lg font-semibold">{name}</h3>
+      <p className="text-sm text-[var(--softeam2)] mb-2">{cargo}</p>
+      <a
+        href={linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1 text-blue-600 hover:underline"
+      >
+        <span className="material-icons text-base">linkedin</span>
+      </a>
+    </div>
+  ))}
+</div>
+
+
+
       </section>
     </main>
   );

@@ -9,7 +9,8 @@ export type ToolCredits = {
     contributors: Contributor[];
 };
 
-export const credits: ToolCredits[] = [
+export const credits: ToolCredits[] = [];
+export const credits2: ToolCredits[] = [
     {
         tool: "Design",
         contributors: [
