@@ -62,4 +62,14 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
       throw new Error("Falha ao enviar o template.");
     }
   }
+
+  export async function deletarTemplate(id: number): Promise<void> {
+    const response = await fetch(`http://localhost:5124/templates/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Falha ao deletar o template.");
+    }
+  }
   

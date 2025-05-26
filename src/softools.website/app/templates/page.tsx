@@ -3,12 +3,23 @@
 import { useEffect, useState } from "react";
 import "@/app/ui/global.css";
 import type { TemplateDto } from "@/lib/dtos/template.dto";
-import { fetchTemplates } from "@/lib/services/template.service.ts";
+import { deletarTemplate, fetchTemplates } from "@/lib/services/template.service.ts";
 
 export default function TemplateListPage() {
   const [templates, setTemplates] = useState<TemplateDto[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+
+  function handleDelete(id: number) {
+    if (!confirm("Tem certeza que deseja deletar este template?")) return;
+  
+    deletarTemplate(id)
+      .then(() => setTemplates((prev) => prev.filter((t) => t.id !== id)))
+      .catch((err) => {
+        console.error("Erro ao deletar:", err);
+        alert("Erro ao deletar template.");
+      });
+  }
 
   useEffect(() => {
     fetchTemplates()
@@ -35,6 +46,16 @@ export default function TemplateListPage() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full p-3 rounded border border-[var(--softeam4)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--softeam2)] bg-transparent"
         />
+
+
+      <div className="mt-4 text-right">
+        <a
+            href="/templates/upload"
+            className="inline-block px-4 py-2 bg-[var(--softeam2)] text-white rounded hover:bg-[var(--softeam3)] transition"
+        >
+            Adicionar template
+        </a>
+        </div>
       </div>
 
       <section className="max-w-3xl mx-auto space-y-8">
@@ -55,6 +76,14 @@ export default function TemplateListPage() {
               >
                 <span className="material-icons">open_in_new</span>
               </a>
+              <button
+                onClick={() => handleDelete(id)}
+                className="text-red-400 hover:text-red-600"
+                aria-label="Deletar Template"
+                title="Deletar Template"
+              >
+                <span className="material-icons">delete</span>
+              </button>
 
               <h2 className="text-2xl font-semibold mb-2">{nome}</h2>
               <p className="mb-4">{descricao}</p>

@@ -91,7 +91,7 @@ export default function GerarDocumentoPage() {
               type="text"
               value={fileName}
               onChange={(e) => setFileName(e.target.value)}
-              className="w-full p-2 rounded border border-[var(--softeam4)] text-black"
+              className="w-full p-2 rounded border border-[var(--softeam4)] text-[var(--foreground)]"
               required
             />
           </div>
@@ -106,7 +106,7 @@ export default function GerarDocumentoPage() {
                 type="text"
                 value={formData[campo] || ""}
                 onChange={(e) => handleInputChange(campo, e.target.value)}
-                className="w-full p-2 rounded border border-[var(--softeam4)] text-black"
+                className="w-full p-2 rounded border border-[var(--softeam4)] text-[var(--foreground)]"
                 required
               />
             </div>
