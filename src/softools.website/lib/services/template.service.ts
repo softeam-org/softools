@@ -42,3 +42,24 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
   
     return await res.blob();
   }
+
+  export async function uploadTemplate(data: {
+    nome: string;
+    descricao: string;
+    arquivo: File;
+  }): Promise<void> {
+    const formData = new FormData();
+    formData.append("nome", data.nome);
+    formData.append("descricao", data.descricao);
+    formData.append("arquivo", data.arquivo);
+  
+    const response = await fetch("http://localhost:5124/documentos/upload-template", {
+      method: "POST",
+      body: formData,
+    });
+  
+    if (!response.ok) {
+      throw new Error("Falha ao enviar o template.");
+    }
+  }
+  

@@ -9,3 +9,10 @@ export interface CamposDto {
     nomeTemplate: string;
     campos: string[];
 }
+
+export interface UploadTemplateRequest {
+    nome: string;
+    descricao: string;
+    arquivo: File;
+  }
+  

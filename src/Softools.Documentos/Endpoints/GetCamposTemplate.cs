@@ -44,7 +44,7 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest, CamposDto>
         
         if (campos == null || !campos.Any())
         {
-            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            await SendErrorsAsync(StatusCodes.Status204NoContent, ct);
             return;
         }
         var result = new CamposDto
