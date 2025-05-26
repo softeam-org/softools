@@ -15,6 +15,8 @@ export default function GerarDocumentoPage() {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [loadingCampos, setLoadingCampos] = useState(true);
   const [submitStatus, setSubmitStatus] = useState<string | null>(null);
+  const [fileName, setFileName] = useState("documento.docx");
+
 
   useEffect(() => {
     if (!isNaN(templateId)) {
@@ -36,13 +38,19 @@ export default function GerarDocumentoPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+  
+    if (!fileName.trim()) {
+      setSubmitStatus("Por favor, insira um nome de arquivo válido.");
+      return;
+    }
+  
     try {
-      const blob = await gerarDocumento(templateId, formData);
+      const blob = await gerarDocumento(templateId, fileName, formData);
   
       const filename =
         blob.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          ? "documento.docx"
-          : "download.pdf";
+          ? fileName
+          : `${fileName}.pdf`;
   
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -70,9 +78,24 @@ export default function GerarDocumentoPage() {
       </h1>
 
       {loadingCampos && <p>Carregando campos...</p>}
+      
 
       {!loadingCampos && campos!.campos.length > 0 && (
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="fileName" className="block mb-1 font-medium capitalize">
+              Nome do arquivo
+            </label>
+            <input
+              id="fileName"
+              type="text"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+              className="w-full p-2 rounded border border-[var(--softeam4)] text-black"
+              required
+            />
+          </div>
+
           {campos!.campos.map((campo) => (
             <div key={campo}>
               <label htmlFor={campo} className="block mb-1 font-medium capitalize">

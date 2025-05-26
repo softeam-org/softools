@@ -31,11 +31,11 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
     }
   }
 
-  export async function gerarDocumento(templateId: number, formData: Record<string, string>): Promise<Blob> {
+  export async function gerarDocumento(templateId: number, nomeDisplay: string, formData: Record<string, string>): Promise<Blob> {
     const res = await fetch("http://localhost:5124/documentos/gerar/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ templateId, campos: formData }),
+      body: JSON.stringify({ templateId, nomeDisplay, campos: formData }),
     });
   
     if (!res.ok) throw new Error("Submit failed");
