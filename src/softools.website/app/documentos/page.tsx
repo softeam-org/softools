@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import "@/app/ui/global.css";
 import type { DocumentoDto } from "@/lib/dtos/document.dto.ts";
-import { fetchDocumentos } from "@/lib/services/document.service.ts";
+import { downloadDocumento, fetchDocumentos } from "@/lib/services/document.service.ts";
 
 export default function DocumentoListPage() {
   const [documentos, setDocumentos] = useState<DocumentoDto[]>([]);
@@ -34,6 +34,16 @@ export default function DocumentoListPage() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full p-3 rounded border border-[var(--softeam4)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--softeam2)] bg-transparent"
         />
+
+        <div className="mt-4 text-right">
+        <a
+            href="/documentos/gerar"
+            className="inline-block px-4 py-2 bg-[var(--softeam2)] text-white rounded hover:bg-[var(--softeam3)] transition"
+        >
+            Gerar Novo Documento
+        </a>
+        </div>
+
       </div>
 
       <section className="max-w-3xl mx-auto space-y-8">
@@ -45,15 +55,14 @@ export default function DocumentoListPage() {
               key={id}
               className="relative p-6 rounded-lg border border-[var(--softeam3)] bg-[var(--softeam3)] text-[var(--foreground)] shadow-lg"
             >
-              <a
-                href={caminho}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => downloadDocumento(id, nome)}
                 className="absolute top-4 right-4 text-[var(--softeam4)] hover:text-[var(--softeam5)]"
-                aria-label="Abrir Documento"
-              >
-                <span className="material-icons">open_in_new</span>
-              </a>
+                aria-label="Baixar Documento"
+                >
+                <span className="material-icons">download</span>
+                </button>
+
 
               <h2 className="text-2xl font-semibold mb-2">{nome}</h2>
               <p className="text-sm text-[var(--softeam4)]">{caminho}</p>
