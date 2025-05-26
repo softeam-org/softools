@@ -47,7 +47,7 @@ export default function TemplateListPage() {
               className="relative p-6 rounded-lg border border-[var(--softeam3)] bg-[var(--softeam3)] text-[var(--foreground)] shadow-lg"
             >
               <a
-                href={`/documentos/gerar/${id}`}
+                href={`/templates/${id}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute top-4 right-4 text-[var(--softeam4)] hover:text-[var(--softeam5)]"
