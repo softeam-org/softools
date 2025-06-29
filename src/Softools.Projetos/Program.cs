@@ -14,7 +14,17 @@ builder.AddServiceDefaults();
 
 // Config do servidor
 builder.Services.AddFastEndpoints()
-    .SwaggerDocument();
+    .SwaggerDocument(o =>
+    {
+        o.DocumentSettings = s =>
+        {
+            s.DocumentName = "v1";
+            s.Title = "API de Projetos";
+            s.Version = "1.0";
+        };
+    });
+
+
 builder.Services.AddDbContext<ProjetosDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("projetosdb"));
@@ -22,26 +32,27 @@ builder.Services.AddDbContext<ProjetosDbContext>(options =>
 
 var app = builder.Build();
 
+
+
 // Middlewares
+app.UseHttpsRedirection();
+app.UseAuthentication(); 
+app.UseAuthorization();
 app.UseFastEndpoints();
 
 // Documentação
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi(c => c.Path = "projetos/openapi/{documentName}.json");
-    app.MapScalarApiReference("/projetos/docs", c =>
-    {
-        c.OpenApiRoutePattern = "projetos/openapi/{documentName}.json";
-    });
+    app.UseOpenApi();
+    app.UseSwaggerUi();
+    app.MapScalarApiReference("projetos/docs");
 }
 
-// Aplicar migrações automaticamente
-// Causará erro pois não temos migrations configuradas ainda.
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ProjetosDbContext>();
     dbContext.Database.Migrate();
 }
-app.UseHttpsRedirection();
 
 app.Run();

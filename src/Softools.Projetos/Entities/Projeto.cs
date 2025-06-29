@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
-namespace Softools.Projetos.Entities;
+﻿namespace Softools.Projetos.Entities;
 
 public class Projeto
 {
@@ -17,11 +15,8 @@ public class Projeto
     public string Descricao { get; set; } = String.Empty;
     public bool Status {get; set;}
 
-    public DateOnlyToStringConverter DataInicio{get; set;}
+    public DateTime DataInicio{get; set;}
 
-    public DateOnlyToStringConverter DataFim{get; set;}
+    public DateTime DataFim{get; set;}
     
-    
-
-
 }
