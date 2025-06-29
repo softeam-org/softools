@@ -1,10 +1,13 @@
-﻿namespace Softools.Projetos.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.InteropServices.JavaScript;
+
+namespace Softools.Projetos.Entities;
 
 public class Projeto
 {
     public Projeto()
     {
-        Id = new Guid();
+        Id = Guid.NewGuid();
         Status = true;
     }
     
@@ -14,9 +17,9 @@ public class Projeto
     
     public string Descricao { get; set; } = String.Empty;
     public bool Status {get; set;}
-
+    
     public DateTime DataInicio{get; set;}
-
+    
     public DateTime DataFim{get; set;}
     
 }
