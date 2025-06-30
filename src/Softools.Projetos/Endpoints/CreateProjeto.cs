@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Softools.Projetos.Data;
 using Softools.Projetos.Entities;
 using Softools.Projetos.Models;
+using Softools.Projetos.Models.DTOs;
 
 namespace Softools.Projetos.Endpoints;
 
