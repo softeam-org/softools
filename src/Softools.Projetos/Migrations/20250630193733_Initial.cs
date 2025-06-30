@@ -19,8 +19,8 @@ namespace Softools.Projetos.Migrations
                     Nome = table.Column<string>(type: "text", nullable: false),
                     Descricao = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<bool>(type: "boolean", nullable: false),
-                    DataInicio = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    DataInicio = table.Column<DateOnly>(type: "date", nullable: false),
+                    DataFim = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {

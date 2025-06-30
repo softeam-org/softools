@@ -1,6 +1,5 @@
 using System.Net;
 using FastEndpoints;
-using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using Softools.Projetos.Data;
 using Softools.Projetos.Entities;
@@ -37,7 +36,7 @@ public class CreateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
             Nome = req.Nome,
             Descricao = req.Descricao,
             DataInicio = req.DataInicio,
-            DataFim = req.DataFim
+            DataFim = req.DataFim,
         };
         
         await _context.Projetos.AddAsync(projeto, ct);

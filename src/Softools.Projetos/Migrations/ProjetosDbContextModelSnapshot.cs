@@ -28,11 +28,11 @@ namespace Softools.Projetos.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DataFim")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("DataFim")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("DataInicio")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("DataInicio")
+                        .HasColumnType("date");
 
                     b.Property<string>("Descricao")
                         .IsRequired()

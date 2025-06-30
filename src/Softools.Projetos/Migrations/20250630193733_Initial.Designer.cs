@@ -12,7 +12,7 @@ using Softools.Projetos.Data;
 namespace Softools.Projetos.Migrations
 {
     [DbContext(typeof(ProjetosDbContext))]
-    [Migration("20250629172851_Initial")]
+    [Migration("20250630193733_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -31,11 +31,11 @@ namespace Softools.Projetos.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DataFim")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("DataFim")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("DataInicio")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("DataInicio")
+                        .HasColumnType("date");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
