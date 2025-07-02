@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, League_Spartan, Bree_Serif } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -10,6 +10,21 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const breeSerif = Bree_Serif({
+  subsets: ['latin'],
+  weight: ['400'], // Bree Serif usually has fewer weights
+  variable: '--font-bree-serif',
+  display: 'swap',
+});
+
+
+const leagueSpartan = League_Spartan({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-league-spartan',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -25,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${leagueSpartan.variable} ${breeSerif.variable} antialiased`}
       >
         {children}
       </body>
