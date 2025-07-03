@@ -7,9 +7,8 @@ interface TopBarProps {
 
 const TopBar: React.FC<TopBarProps> = ({ title }) => {
   return (
-    <header style={styles.header} className="title text-4xl">
+    <header style={styles.header} className="title text-4xl shadow-xl shadow-black z-50">
       <Image src="/softeam.png" alt="softeam" width={200} height={50} />
-      <h1 style={styles.title}>{title}</h1>
     </header>
   );
 };

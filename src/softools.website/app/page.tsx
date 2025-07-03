@@ -5,27 +5,43 @@ import { useRouter } from 'next/navigation';
 import TopBar from './components/Topbar';
 import IconSidebar from './components/IconSidebar';
 import SubitemsPanel from './components/SubitemsPanel';
+import { FaCog, FaFileAlt, FaUsers } from 'react-icons/fa';
 
 const categoryData = {
-  Files: [
-    { name: 'Upload Documents', link: '/files/upload' },
-    { name: 'View Reports', link: '/files/reports' },
-    { name: 'Archive', link: '/files/archive' },
-  ],
-  Members: [
-    { name: 'Add Member', link: '/members/add' },
-    { name: 'Manage Roles', link: '/members/roles' },
-    { name: 'Attendance', link: '/members/attendance' },
-  ],
-  Settings: [
-    { name: 'Profile Settings', link: '/settings/profile' },
-    { name: 'Access Control', link: '/settings/access' },
-    { name: 'Notifications', link: '/settings/notifications' },
-  ],
+  Files: {
+    icon: <FaFileAlt size={32}/>,
+    items: [
+      { name: 'Upload Documents', link: '/files/upload' },
+      { name: 'View Reports', link: '/files/reports' },
+      { name: 'Archive', link: '/files/archive' },
+    ],
+  },
+  Members: {
+    icon: <FaUsers size={32}/>,
+    items: [
+      { name: 'Add Member', link: '/members/add' },
+      { name: 'Manage Roles', link: '/members/roles' },
+      { name: 'Attendance', link: '/members/attendance' },
+    ],
+  },
+  Settings: {
+    icon: <FaCog size={32}/>,
+    items: [
+      { name: 'Profile Settings', link: '/settings/profile' },
+      { name: 'Access Control', link: '/settings/access' },
+      { name: 'Notifications', link: '/settings/notifications' },
+    ],
+  },
 };
 
+// Map categoryData to an array for the sidebar, including icon & name
+const categories = Object.entries(categoryData).map(([name, data]) => ({
+  name,
+  icon: data.icon,
+}));
+
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState(Object.keys(categoryData)[0]);
+  const [selectedCategory, setSelectedCategory] = useState(categories[0].name);
   const router = useRouter();
 
   const handleSubitemClick = (link: string) => {
@@ -38,12 +54,12 @@ export default function Home() {
       <TopBar title="Softools" />
       <div className="flex flex-1">
         <IconSidebar
-          categories={Object.keys(categoryData)}
+          categories={categories}          // Pass array of {name, icon}
           selected={selectedCategory}
           onSelect={setSelectedCategory}
         />
         <SubitemsPanel
-          items={categoryData[selectedCategory] ?? []}  // <-- fallback here
+          items={categoryData[selectedCategory]?.items || []} // Use selectedCategory items
           onSelect={handleSubitemClick}
         />
 
