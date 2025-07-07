@@ -36,14 +36,6 @@ public class UpdateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
             return;
         }
         
-        if (await _context.Projetos
-                .AnyAsync(u => u.Nome == req.Nome && u.Id != req.Id, ct))
-        {
-            AddError(r => r.Nome, "Nome já cadastrado por outro projeto");
-            await SendErrorsAsync(409, ct);
-            return;
-        }
-        
         projeto.Nome = req.Nome;
         projeto.Descricao = req.Descricao;
         projeto.DataInicio = req.DataInicio;

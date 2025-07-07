@@ -13,6 +13,7 @@ public class ProjetosDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Projeto>().HasIndex(p => p.Id).IsUnique();
+        builder.Entity<Projeto>().HasIndex(p => p.Nome).IsUnique();
     }
     
 }

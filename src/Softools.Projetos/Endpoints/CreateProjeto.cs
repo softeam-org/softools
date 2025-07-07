@@ -26,11 +26,6 @@ public class CreateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
     
     public override async Task HandleAsync(ProjetoRequest req,CancellationToken ct)
     {
-        if (await _context.Projetos.AnyAsync(u => u.Nome == req.Nome, ct))
-        {
-            AddError(r => r.Nome, "Nome já cadastrado");
-            ThrowIfAnyErrors();
-        }
         
         var projeto = new Projeto
         {
