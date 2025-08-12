@@ -1,11 +1,12 @@
 using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Packaging;
 using FastEndpoints;
+using Softools.Documentos.Models.Dtos;
 using Softools.Documentos.Models.Requests;
 
 namespace Softools.Documentos.Endpoints;
 
-public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest>
+public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest, CamposDto>
 {
     private readonly DocumentosDbContext _context;
 
@@ -45,6 +46,11 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest>
             await Send.ErrorsAsync(StatusCodes.Status404NotFound, ct);
             return;
         }
+        var result = new CamposDto
+        {
+            NomeTemplate = template.Nome,
+            Campos = campos.ToArray()
+        };
 
         await Send.OkAsync(campos, cancellation: ct);
     }

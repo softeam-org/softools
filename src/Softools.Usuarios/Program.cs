@@ -32,6 +32,7 @@ builder.Services.AddDbContext<UsuariosDbContext>(options =>
 });
 
 var app = builder.Build();
+app.UseServiceDefaults();
 
 // 4. Middlewares
 app.UseHttpsRedirection();

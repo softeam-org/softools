@@ -21,8 +21,9 @@ builder.Services.AddFastEndpoints()
 builder.Services.AddDbContext<DocumentosDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("documentosdb")));
 
-var app = builder.Build();
 
+var app = builder.Build();
+app.UseServiceDefaults();
 // Middlewares
 app.UseAuthentication()
     .UseAuthorization()

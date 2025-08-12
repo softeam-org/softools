@@ -22,7 +22,7 @@ builder.Services.AddDbContext<ProjetosDbContext>(options =>
 });
 
 var app = builder.Build();
-
+app.UseServiceDefaults();
 // Middlewares
 
 app.UseAuthentication(); 

@@ -1,6 +1,8 @@
 using FastEndpoints;
+using Softools.Documentos.Entities;
 using Softools.Documentos.Models.Requests;
 using Softools.Documentos.Services;
+using Softools.Documentos.ValueTypes;
 
 namespace Softools.Documentos.Endpoints;
 
@@ -39,6 +41,17 @@ public class GerarDocumento : Endpoint<GerarDocumentoRequest>
             await Send.ErrorsAsync(StatusCodes.Status500InternalServerError, ct);
             return;
         }
+        
+        var documento = new Documento
+        {
+            Nome = req.NomeDisplay,
+            Caminho = documentoGerado,
+            Tipo = TipoDocumento.Gerado
+        };
+        
+        _dbContext.Documentos.Add(documento);
+        await _dbContext.SaveChangesAsync(ct);
+        
         var fileInfo = new FileInfo(documentoGerado);
         
         await Send.FileAsync(fileInfo, cancellation: ct);
