@@ -28,7 +28,7 @@ app.UseFastEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi(c => c.Path = "projetos/openapi/{documentName}.json");
-    app.MapScalarApiReference("/projetos/docs", c =>
+    app.MapScalarApiReference("/docs", c =>
     {
         c.OpenApiRoutePattern = "projetos/openapi/{documentName}.json";
     });

@@ -1,0 +1,84 @@
+services:
+  postgres:
+    image: postgres:14
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  auth:
+    build:
+      context: ./src
+      dockerfile: Softools.Auth/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  documentos:
+    build:
+      context: ./src
+      dockerfile: Softools.Documentos/Dockerfile
+
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+  projetos:
+    build:
+      context: ./src
+      dockerfile: Softools.Projetos/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  usuarios:
+    build:
+      context: ./src
+      dockerfile: Softools.Usuarios/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  frontend:
+    build:
+      context: ./src/softools.website
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth
+      - documentos
+      - projetos
+      - usuarios
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - auth
+      - documentos
+      - projetos
+      - usuarios
+
+volumes:
+  pgdata:

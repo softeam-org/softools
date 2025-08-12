@@ -1,6 +1,5 @@
 "use client";
 
-import { credits } from "@/lib/data/credits";
 import { socialSeeds } from "@/lib/dtos/socials.dto";
 import Image from "next/image";
 

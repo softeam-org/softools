@@ -34,7 +34,7 @@ app.UseFastEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi(c => c.Path = "auth/openapi/{documentName}.json");
-    app.MapScalarApiReference("/auth/docs", c =>
+    app.MapScalarApiReference("/docs", c =>
     {
         c.OpenApiRoutePattern = "auth/openapi/{documentName}.json";
     });
