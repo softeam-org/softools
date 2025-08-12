@@ -24,6 +24,9 @@ builder.Services.AddDbContext<ProjetosDbContext>(options =>
 var app = builder.Build();
 
 // Middlewares
+
+app.UseAuthentication(); 
+app.UseAuthorization();
 app.UseFastEndpoints();
 
 // Documentação
