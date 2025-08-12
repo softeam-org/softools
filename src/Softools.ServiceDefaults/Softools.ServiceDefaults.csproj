@@ -10,8 +10,8 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Aspire.RabbitMQ.Client" Version="9.2.0" />
-    <PackageReference Include="FastEndpoints" Version="6.0.0" />
-    <PackageReference Include="FastEndpoints.Security" Version="6.0.0" />
+    <PackageReference Include="FastEndpoints" Version="7.0.1" />
+    <PackageReference Include="FastEndpoints.Security" Version="7.0.1" />
     
     <PackageReference Include="Google.Apis.Auth" Version="1.70.0" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.69.0.3746" />
