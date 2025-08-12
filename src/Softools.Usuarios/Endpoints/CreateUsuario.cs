@@ -16,7 +16,6 @@ public class CreateUsuario : Endpoint<UsuarioRequest, UsuarioResponse>
     public override void Configure()
     {
         Post("/usuarios");
-        AllowAnonymous();
         Description(b=>b
         .Produces<UsuarioResponse>(201)
         .ProducesProblemDetails(400)
@@ -46,7 +45,7 @@ public class CreateUsuario : Endpoint<UsuarioRequest, UsuarioResponse>
             CPF = usuario.CPF
         };
 
-        await SendAsync(response, (int)HttpStatusCode.Created,ct);
+        await Send.CreatedAtAsync("/usuarios/{id}", new { id = usuario.Id }, response, cancellation: ct);
         
     }
 

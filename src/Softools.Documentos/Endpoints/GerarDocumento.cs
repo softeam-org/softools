@@ -20,7 +20,6 @@ public class GerarDocumento : Endpoint<GerarDocumentoRequest>
     public override void Configure()
     {
         Post("/documentos/gerar");
-        AllowAnonymous();
         Description(x => x
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
@@ -32,14 +31,14 @@ public class GerarDocumento : Endpoint<GerarDocumentoRequest>
         var template = await _dbContext.Templates.FindAsync(req.TemplateId);
         if (template == null)
         {
-            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            await Send.ErrorsAsync(StatusCodes.Status404NotFound, ct);
             return;
         }
 
         var documentoGerado = _templateService.GerarDocumento(template.Caminho, req.Campos);
         if (string.IsNullOrWhiteSpace(documentoGerado))
         {
-            await SendErrorsAsync(StatusCodes.Status500InternalServerError, ct);
+            await Send.ErrorsAsync(StatusCodes.Status500InternalServerError, ct);
             return;
         }
         
@@ -55,6 +54,6 @@ public class GerarDocumento : Endpoint<GerarDocumentoRequest>
         
         var fileInfo = new FileInfo(documentoGerado);
         
-        await SendFileAsync(fileInfo, cancellation: ct);
+        await Send.FileAsync(fileInfo, cancellation: ct);
     }
 }

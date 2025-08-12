@@ -1,3 +1,5 @@
+using Softools.ServiceDefaults;
+
 var builder = WebApplication.CreateBuilder(args);
  
 builder.AddServiceDefaults();

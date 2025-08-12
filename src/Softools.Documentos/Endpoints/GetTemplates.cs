@@ -17,12 +17,11 @@ public class GetTemplates : EndpointWithoutRequest<IEnumerable<TemplateDocumento
     public override void Configure()
     {
         Get("/templates");
-        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
         var result = await _context.Templates.ToListAsync(ct);
-        await SendOkAsync(result.Select(t => t.ToDto()), ct);
+        await Send.OkAsync(result.Select(t => t.ToDto()), ct);
     }
 }

@@ -29,10 +29,10 @@ public class GetUsuarios : EndpointWithoutRequest<List<Usuario>>
 
         if (!usuarios.Any())
         {
-            await SendNoContentAsync(ct);
+            await Send.NoContentAsync(ct);
             return;
         }
 
-        await SendAsync(usuarios, cancellation: ct);
+        await Send.OkAsync(usuarios, cancellation: ct);
     }
 }

@@ -18,7 +18,7 @@ public class Orquestrador
     public Orquestrador()
     {
         Builder = DistributedApplication.CreateBuilder();
-        
+        Builder.AddDockerComposeEnvironment("env");
         var rmqUsername = Builder.AddParameter("RabbitMqUsername");
         var rmqPassword = Builder.AddParameter("RabbitMqPassword");
         rabbitmq = Builder.AddRabbitMQ("messaging", rmqUsername, rmqPassword)
@@ -67,23 +67,6 @@ public class Orquestrador
     }
     
     /// <summary>
-    /// Adiciona o API Gateway ao orquestrador.
-    /// </summary>
-    /// <typeparam name="T">Tipo que implementa <see cref="IProjectMetadata"/>.</typeparam>
-    /// <param name="nome">Nome do gateway.</param>
-    /// <returns>Instância atual de <see cref="Orquestrador"/> para encadeamento.</returns>
-    public Orquestrador AdicionarApiGateway<T>(string nome) where T : IProjectMetadata, new()
-    {
-        gateway = Builder.AddProject<T>(nome);
-        
-        // RabbitMQ
-        gateway.WithReference(rabbitmq)
-            .WaitFor(rabbitmq);
-
-        return this;
-    }
-    
-    /// <summary>
     /// Configura um aplicativo NPM com o nome e dependências fornecidos.
     /// </summary>
     /// <param name="name">O nome do aplicativo NPM.</param>
@@ -119,16 +102,16 @@ public class Orquestrador
     /// <exception cref="InvalidOperationException">Lançada se o API Gateway não tiver sido configurado.</exception>
     public DistributedApplication Build()
     {
-        if (gateway == null) 
-        {
-            throw new InvalidOperationException("Gateway not set up");
-        }
-
+        var yarp = Builder.AddYarp("ingress")
+            .WithEndpoint(port: 8001, scheme: "http");
+        
         foreach (var servico in servicos.Values)
         {
-            gateway.WithReference(servico)
-                .WaitFor(servico);
+            yarp.WithReference(servico);
         }
+
+        yarp.LoadFromConfiguration("ReverseProxy");
+        
         return Builder.Build();
     }
     private void ConfigurarPostgres<T>(string nome, IResourceBuilder<ProjectResource> servico) where T : IProjectMetadata, new()

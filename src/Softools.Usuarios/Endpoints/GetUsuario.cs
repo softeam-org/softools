@@ -38,11 +38,11 @@ public class GetUsuarioById : Endpoint<GetUsuarioByIdRequest, UsuarioResponse>
 
         if (usuario is null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
 
-        await SendAsync(usuario, cancellation: ct);
+        await Send.OkAsync(usuario, cancellation: ct);
     }
 }
 

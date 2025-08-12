@@ -40,7 +40,7 @@ public class DeleteUsuario : Endpoint<DeleteUsuarioRequest>
         if (usuario is null)
         {
             _logger.LogWarning("Tentativa de excluir usuário não encontrado. ID: {UsuarioId}", req.Id);
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
 
@@ -50,13 +50,13 @@ public class DeleteUsuario : Endpoint<DeleteUsuarioRequest>
             await _context.SaveChangesAsync(ct);
 
             _logger.LogInformation("Usuário excluído com sucesso. ID: {UsuarioId}", req.Id);
-            await SendNoContentAsync(ct);
+            await Send.NoContentAsync(ct);
         }
         catch (DbUpdateException ex)
         {
             _logger.LogError(ex, "Erro ao excluir usuário. ID: {UsuarioId}", req.Id);
             AddError("Não foi possível excluir o usuário devido a restrições no banco de dados");
-            await SendErrorsAsync(StatusCodes.Status500InternalServerError, ct);
+            await Send.ErrorsAsync(StatusCodes.Status500InternalServerError, ct);
         }
     }
 }

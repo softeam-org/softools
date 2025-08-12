@@ -18,7 +18,6 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest, CamposDto>
     public override void Configure()
     {
         Get("/templates/campos/{Id}");
-        AllowAnonymous();
         Description(x => x
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
@@ -30,7 +29,7 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest, CamposDto>
         var template = await _context.Templates.FindAsync(req.Id);
         if (template == null)
         {
-            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            await Send.ErrorsAsync(StatusCodes.Status404NotFound, ct);
             return;
         }
 
@@ -44,7 +43,7 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest, CamposDto>
         
         if (campos == null || !campos.Any())
         {
-            await SendErrorsAsync(StatusCodes.Status204NoContent, ct);
+            await Send.ErrorsAsync(StatusCodes.Status404NotFound, ct);
             return;
         }
         var result = new CamposDto
@@ -53,6 +52,6 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest, CamposDto>
             Campos = campos.ToArray()
         };
 
-        await SendAsync(result, cancellation: ct);
+        await Send.OkAsync(campos, cancellation: ct);
     }
 }

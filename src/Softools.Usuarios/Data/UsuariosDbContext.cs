@@ -13,7 +13,6 @@ public class UsuariosDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Usuario>().HasIndex(u => u.Id).IsUnique();
-        
     }
     
 }

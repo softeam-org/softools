@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Softools.Documentos;
 using Softools.Documentos.Services;
+using Softools.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,13 +25,15 @@ builder.Services.AddDbContext<DocumentosDbContext>(
 var app = builder.Build();
 app.UseServiceDefaults();
 // Middlewares
-app.UseFastEndpoints();
+app.UseAuthentication()
+    .UseAuthorization()
+    .UseFastEndpoints();
 
 // Documentação
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi(c => c.Path = "documentos/openapi/{documentName}.json");
-    app.MapScalarApiReference("/documentos/docs", c =>
+    app.MapScalarApiReference("/docs", c =>
     {
         c.OpenApiRoutePattern = "documentos/openapi/{documentName}.json";
     });

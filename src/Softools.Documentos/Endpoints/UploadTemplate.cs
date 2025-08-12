@@ -17,7 +17,6 @@ public class UploadTemplate : Endpoint<UploadTemplateRequest, TemplateDocumentoD
     public override void Configure()
     {
         Post("/documentos/upload-template");
-        AllowAnonymous();
         AllowFileUploads();
         Description(x => x
             .WithName("Upload Template")
@@ -54,11 +53,11 @@ public class UploadTemplate : Endpoint<UploadTemplateRequest, TemplateDocumentoD
                 Descricao = template.Descricao
             };
 
-            await SendAsync(response, cancellation: ct);
+            await Send.OkAsync(response, cancellation: ct);
         }
         else
         {
-            await SendErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
         }
     }
     

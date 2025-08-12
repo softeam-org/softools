@@ -17,14 +17,13 @@ public class GetDocumentos : EndpointWithoutRequest<IEnumerable<DocumentoDto>>
     public override void Configure()
     {
         Get("/documentos");
-        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
         var result = await _context.Documentos.ToListAsync(ct);
 
-        await SendOkAsync(result.Select(d => d.ToDto()), ct);
+        await Send.OkAsync(result.Select(d => d.ToDto()), ct);
 
     }
 }

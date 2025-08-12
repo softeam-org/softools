@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Softools.Auth;
+using Softools.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,21 +21,17 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("authdb"));
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<AuthDbContext>()
-    .AddDefaultTokenProviders();
-
 var app = builder.Build();
 app.UseServiceDefaults();
 
 // Middlewares
-app.UseFastEndpoints();
+app.UseAuthentication().UseAuthorization().UseFastEndpoints();
 
 // Documentação
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi(c => c.Path = "auth/openapi/{documentName}.json");
-    app.MapScalarApiReference("/auth/docs", c =>
+    app.MapScalarApiReference("/docs", c =>
     {
         c.OpenApiRoutePattern = "auth/openapi/{documentName}.json";
     });

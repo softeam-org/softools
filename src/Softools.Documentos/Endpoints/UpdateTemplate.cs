@@ -17,7 +17,6 @@ public class UpdateTemplate : Endpoint<UpdateTemplateRequest, TemplateDocumentoD
     public override void Configure()
     {
         Patch("/templates/{Id}");
-        AllowAnonymous();
     }
 
     public override async Task HandleAsync(UpdateTemplateRequest req, CancellationToken ct)
@@ -26,7 +25,7 @@ public class UpdateTemplate : Endpoint<UpdateTemplateRequest, TemplateDocumentoD
 
         if (template is null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
         
@@ -35,6 +34,6 @@ public class UpdateTemplate : Endpoint<UpdateTemplateRequest, TemplateDocumentoD
         
         await _context.SaveChangesAsync(ct);
 
-        await SendOkAsync(template.ToDto(), ct);
+        await Send.OkAsync(template.ToDto(), ct);
     }
 }
