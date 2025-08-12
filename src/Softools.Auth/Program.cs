@@ -24,7 +24,7 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 var app = builder.Build();
 
 // Middlewares
-app.UseFastEndpoints();
+app.UseAuthentication().UseAuthorization().UseFastEndpoints();
 
 // Documentação
 if (app.Environment.IsDevelopment())

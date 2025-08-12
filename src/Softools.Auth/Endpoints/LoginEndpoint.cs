@@ -47,7 +47,8 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
         
         var jwtToken = JwtBearer.CreateToken(o =>
         {
-            o.SigningKey = "A secret token signing key";
+            o.SigningKey = Environment.GetEnvironmentVariable("JWT_SECRET")
+                           ?? throw new InvalidOperationException("JWT Secret não configurado. Defina uma variavel de ambiente JWT_SECRET ou configure");
             o.ExpireAt = DateTime.UtcNow.AddDays(1);
             o.User.Claims.Add(("Email", req.Email));
         });

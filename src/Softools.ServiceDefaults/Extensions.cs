@@ -41,7 +41,6 @@ public static class Extensions
         builder.Services.AddAuthenticationJwtBearer(s =>
             {
                 s.SigningKey = Environment.GetEnvironmentVariable("JWT_SECRET") 
-                   ?? builder.Configuration["JwtSecret"]
                    ?? throw new InvalidOperationException("JWT Secret não configurado. Defina uma variavel de ambiente JWT_SECRET ou configure");
             })
             .AddAuthorization();
