@@ -68,6 +68,18 @@ services:
       - projetos
       - usuarios
 
+  rubby:
+    build:
+      context: ./src
+      dockerfile: Softools.Rubby/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+      - nginx
+
+
   nginx:
     image: nginx:latest
     ports:
