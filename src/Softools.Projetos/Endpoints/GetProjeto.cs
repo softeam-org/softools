@@ -18,7 +18,6 @@ public class GetProjeto : Endpoint<GetProjetoByIdRequest ,ProjetoResponse>
     public override void Configure()
     {
         Get("/projetos/{id}");
-        AllowAnonymous();
         Description(b => b
             .Produces<ProjetoResponse>(200, "application/json")
             .ProducesProblem(404, "application/json")

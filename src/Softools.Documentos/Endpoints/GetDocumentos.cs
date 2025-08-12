@@ -17,7 +17,6 @@ public class GetDocumentos : EndpointWithoutRequest<IEnumerable<DocumentoDto>>
     public override void Configure()
     {
         Get("/documentos");
-        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CancellationToken ct)

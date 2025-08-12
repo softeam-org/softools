@@ -18,7 +18,6 @@ public class UpdateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
     public override void Configure()
     {
         Put("/projetos/{id}");
-        AllowAnonymous();
         Description(b => b
             .Produces<ProjetoResponse>(200)
             .ProducesProblemDetails(400)

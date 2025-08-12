@@ -17,7 +17,6 @@ public class UploadDocumento : Endpoint<UploadDocumentoRequest, DocumentoDto>
     public override void Configure()
     {
         Post("/documentos/upload");
-        AllowAnonymous();
         AllowFileUploads();
         Description(x => x
             .Produces<DocumentoDto>(StatusCodes.Status200OK)

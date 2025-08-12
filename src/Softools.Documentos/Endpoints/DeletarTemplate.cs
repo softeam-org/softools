@@ -15,7 +15,6 @@ public class DeletarTemplate : Endpoint<DeleteTemplateRequest>
     public override void Configure()
     {
         Delete("/templates/{Id}");
-        AllowAnonymous();
     }
 
     public override async Task HandleAsync(DeleteTemplateRequest req, CancellationToken ct)

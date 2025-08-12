@@ -17,7 +17,6 @@ public class UpdateTemplate : Endpoint<UpdateTemplateRequest, TemplateDocumentoD
     public override void Configure()
     {
         Patch("/templates/{Id}");
-        AllowAnonymous();
     }
 
     public override async Task HandleAsync(UpdateTemplateRequest req, CancellationToken ct)

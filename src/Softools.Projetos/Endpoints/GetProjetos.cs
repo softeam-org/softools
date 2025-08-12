@@ -17,7 +17,6 @@ public class GetProjetos : EndpointWithoutRequest<List<Projeto>>
     public override void Configure()
     {
         Get("/projetos");
-        AllowAnonymous();
         Description(b => b
             .Produces<List<Projeto>>(200, "application/json")
             .WithTags("Projetos"));

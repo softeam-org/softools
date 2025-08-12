@@ -18,7 +18,6 @@ public class GerarDocumento : Endpoint<GerarDocumentoRequest>
     public override void Configure()
     {
         Post("/documentos/gerar");
-        AllowAnonymous();
         Description(x => x
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)

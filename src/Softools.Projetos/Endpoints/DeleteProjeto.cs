@@ -19,7 +19,6 @@ public class DeleteProjeto : Endpoint<DeleteProjetoRequest>
     public override void Configure()
     {
         Delete("/projetos/{id}");
-        AllowAnonymous();
         Description(b => b
             .Produces(204)
             .ProducesProblemFE(404)

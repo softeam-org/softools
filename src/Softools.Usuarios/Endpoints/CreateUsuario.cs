@@ -16,7 +16,6 @@ public class CreateUsuario : Endpoint<UsuarioRequest, UsuarioResponse>
     public override void Configure()
     {
         Post("/usuarios");
-        AllowAnonymous();
         Description(b=>b
         .Produces<UsuarioResponse>(201)
         .ProducesProblemDetails(400)

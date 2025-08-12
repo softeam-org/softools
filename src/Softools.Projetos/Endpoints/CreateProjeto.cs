@@ -16,7 +16,6 @@ public class CreateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
     public override void Configure()
     {
         Post("/projetos");
-        AllowAnonymous();
         Description(b => b
             .Produces<ProjetoResponse> (201)
             .ProducesProblemDetails(400)

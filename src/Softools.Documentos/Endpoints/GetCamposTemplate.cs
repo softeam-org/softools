@@ -17,7 +17,6 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest>
     public override void Configure()
     {
         Get("/templates/campos/{Id}");
-        AllowAnonymous();
         Description(x => x
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)

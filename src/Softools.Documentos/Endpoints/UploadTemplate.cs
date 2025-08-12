@@ -17,7 +17,6 @@ public class UploadTemplate : Endpoint<UploadTemplateRequest, TemplateDocumentoD
     public override void Configure()
     {
         Post("/documentos/upload-template");
-        AllowAnonymous();
         AllowFileUploads();
         Description(x => x
             .WithName("Upload Template")
