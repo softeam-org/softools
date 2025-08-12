@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Softools.Auth;
+using Softools.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Softools.Documentos;
 using Softools.Documentos.Services;
+using Softools.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 

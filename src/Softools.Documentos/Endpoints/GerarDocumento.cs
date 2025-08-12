@@ -44,8 +44,4 @@ public class GerarDocumento : Endpoint<GerarDocumentoRequest>
         
         await SendFileAsync(fileInfo, cancellation: ct);
     }
-    
-    
-    
-    
 }

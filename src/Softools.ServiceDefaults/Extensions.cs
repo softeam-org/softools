@@ -1,16 +1,19 @@
 using System.Text.Json;
 using FastEndpoints.Security;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Tasks.v1;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
-namespace Microsoft.Extensions.Hosting;
+namespace Softools.ServiceDefaults;
 
 // Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
 // This project should be referenced by each service project in your solution.
@@ -39,9 +42,13 @@ public static class Extensions
             {
                 s.SigningKey = Environment.GetEnvironmentVariable("JWT_SECRET") 
                    ?? builder.Configuration["JwtSecret"]
-                   ?? throw new InvalidOperationException("JWT Secret não configurado");
+                   ?? throw new InvalidOperationException("JWT Secret não configurado. Defina uma variavel de ambiente JWT_SECRET ou configure");
             })
             .AddAuthorization();
+
+        builder.Services.AddSingleton<GoogleAuthService>();
+        builder.Services.AddSingleton<GoogleCalendarService>();
+        builder.Services.AddSingleton<GoogleTasksService>();
 
         builder.Services.AddProblemDetails();
 
@@ -139,6 +146,26 @@ public static class Extensions
                 Predicate = r => r.Tags.Contains("live")
             });
         }
+
+        return app;
+    }
+    
+    public static async Task<WebApplication> UseDefaultServicesAsync(this WebApplication app) 
+    {
+        using var scope = app.Services.CreateScope();
+        var authService = scope.ServiceProvider.GetRequiredService<GoogleAuthService>();
+        var calendarService = scope.ServiceProvider.GetRequiredService<GoogleCalendarService>();
+        var tasksService = scope.ServiceProvider.GetRequiredService<GoogleTasksService>();
+        
+        // Initialize Google services
+        await authService.AuthorizeAsync(
+        [
+            CalendarService.Scope.Calendar,
+            TasksService.Scope.Tasks
+        ]);
+        
+        await calendarService.InitializeAsync();
+        await tasksService.InitializeAsync();
 
         return app;
     }

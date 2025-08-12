@@ -18,7 +18,7 @@ public class Orquestrador
     public Orquestrador()
     {
         Builder = DistributedApplication.CreateBuilder();
-        
+        Builder.AddDockerComposeEnvironment("env");
         var rmqUsername = Builder.AddParameter("RabbitMqUsername");
         var rmqPassword = Builder.AddParameter("RabbitMqPassword");
         rabbitmq = Builder.AddRabbitMQ("messaging", rmqUsername, rmqPassword)
