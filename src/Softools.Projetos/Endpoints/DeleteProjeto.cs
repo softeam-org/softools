@@ -35,7 +35,7 @@ public class DeleteProjeto : Endpoint<DeleteProjetoRequest>
         if (projeto is null)
         {
             _logger.LogWarning("Tentativa de excluir projeto não encontrado. ID: {ProjetoId}", req.Id);
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
         
@@ -45,13 +45,13 @@ public class DeleteProjeto : Endpoint<DeleteProjetoRequest>
             await _context.SaveChangesAsync(ct);
 
             _logger.LogInformation("Usuário excluído com sucesso. ID: {ProjetoId}", req.Id);
-            await SendNoContentAsync(ct);
+            await Send.NoContentAsync(ct);
         }
         catch (DbUpdateException ex)
         {
             _logger.LogError(ex, "Erro ao excluir usuário. ID: {ProjetoId}", req.Id);
             AddError("Não foi possível excluir o projeto devido a restrições no banco de dados");
-            await SendErrorsAsync(StatusCodes.Status500InternalServerError, ct);
+            await Send.ErrorsAsync(StatusCodes.Status500InternalServerError, ct);
         }
     }
     

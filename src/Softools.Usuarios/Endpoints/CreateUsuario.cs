@@ -46,7 +46,7 @@ public class CreateUsuario : Endpoint<UsuarioRequest, UsuarioResponse>
             CPF = usuario.CPF
         };
 
-        await SendAsync(response, (int)HttpStatusCode.Created,ct);
+        await Send.CreatedAtAsync("/usuarios/{id}", new { id = usuario.Id }, response, cancellation: ct);
         
     }
 

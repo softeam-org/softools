@@ -44,10 +44,10 @@ public class GetProjeto : Endpoint<GetProjetoByIdRequest ,ProjetoResponse>
 
         if (projeto is null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
-        await SendAsync(projeto, cancellation: ct);
+        await Send.OkAsync(projeto, cancellation: ct);
     }
 
 }

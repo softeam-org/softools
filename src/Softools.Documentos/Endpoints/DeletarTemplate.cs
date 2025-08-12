@@ -24,13 +24,13 @@ public class DeletarTemplate : Endpoint<DeleteTemplateRequest>
 
         if (template is null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
         
         _context.Templates.Remove(template);
         await _context.SaveChangesAsync(ct);
 
-        await SendNoContentAsync(ct);
+        await Send.NoContentAsync(ct);
     }
 }

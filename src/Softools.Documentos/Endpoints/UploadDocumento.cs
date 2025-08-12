@@ -52,11 +52,11 @@ public class UploadDocumento : Endpoint<UploadDocumentoRequest, DocumentoDto>
                 Caminho = documento.Caminho
             };
 
-            await SendAsync(response, cancellation: ct);
+            await Send.OkAsync(response, cancellation: ct);
         }
         else
         {
-            await SendErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
         }
     }
     

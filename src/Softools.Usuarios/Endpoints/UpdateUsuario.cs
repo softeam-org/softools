@@ -32,7 +32,7 @@ public class UpdateUsuario : Endpoint<UpdateUsuarioRequest, UsuarioResponse>
 
         if (usuario is null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
 
@@ -41,7 +41,7 @@ public class UpdateUsuario : Endpoint<UpdateUsuarioRequest, UsuarioResponse>
             .AnyAsync(u => u.CPF == req.CPF && u.Id != req.Id, ct))
         {
             AddError(r => r.CPF, "CPF já cadastrado por outro usuário");
-            await SendErrorsAsync(409, ct);
+            await Send.ErrorsAsync(409, ct);
             return;
         }
 
@@ -61,7 +61,7 @@ public class UpdateUsuario : Endpoint<UpdateUsuarioRequest, UsuarioResponse>
             CPF = usuario.CPF
         };
 
-        await SendAsync(response, cancellation: ct);
+        await Send.OkAsync(response, cancellation: ct);
     }
 }
 

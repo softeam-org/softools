@@ -32,7 +32,7 @@ public class UpdateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
             .FirstOrDefaultAsync(u => u.Id == req.Id, ct);
         if (projeto is null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
         
@@ -54,7 +54,7 @@ public class UpdateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
             Status = projeto.Status
         };
 
-        await SendAsync(response, cancellation: ct);
+        await Send.OkAsync(response, cancellation: ct);
        
     }
 }

@@ -29,7 +29,7 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest>
         var template = await _context.Templates.FindAsync(req.Id);
         if (template == null)
         {
-            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            await Send.ErrorsAsync(StatusCodes.Status404NotFound, ct);
             return;
         }
 
@@ -43,10 +43,10 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest>
         
         if (campos == null || !campos.Any())
         {
-            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            await Send.ErrorsAsync(StatusCodes.Status404NotFound, ct);
             return;
         }
 
-        await SendAsync(campos, cancellation: ct);
+        await Send.OkAsync(campos, cancellation: ct);
     }
 }

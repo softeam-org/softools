@@ -48,6 +48,6 @@ public class CreateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
             Status = projeto.Status
         };
         
-        await SendAsync(response, (int)HttpStatusCode.Created,ct);
+        await Send.CreatedAtAsync("/projetos/{id}", new { id = projeto.Id }, response, cancellation: ct);
     }
 }

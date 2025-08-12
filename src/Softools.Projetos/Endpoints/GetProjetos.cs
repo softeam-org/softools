@@ -31,11 +31,11 @@ public class GetProjetos : EndpointWithoutRequest<List<Projeto>>
 
         if (!projetos.Any())
         {
-            await SendNoContentAsync(ct);
+            await Send.NoContentAsync(ct);
             return;
         }
 
-        await SendAsync(projetos, cancellation: ct);
+        await Send.OkAsync(projetos, cancellation: ct);
     }
     
 }
