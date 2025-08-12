@@ -1,8 +1,12 @@
 import { CamposDto, TemplateDto } from "@/lib/dtos/template.dto";
+import { getAuthHeaders } from "./auth.service";
+
 
 export async function fetchTemplates(): Promise<TemplateDto[]> {
     try {
-      const response = await fetch("http://localhost:5124/templates");
+      const response = await fetch("http://localhost/api/documents/templates", {
+              headers: getAuthHeaders(),
+            });
       if (!response.ok) {
         throw new Error("Failed to fetch templates");
       }
@@ -16,7 +20,9 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
 
   export async function fetchCampos(id: number): Promise<CamposDto> {
     try {
-      const response = await fetch(`http://localhost:5124/templates/campos/${id}`);
+      const response = await fetch(`http://localhost/api/documents/templates/campos/${id}`, {
+        headers: getAuthHeaders(),
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch campos");
       }
@@ -32,9 +38,11 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
   }
 
   export async function gerarDocumento(templateId: number, nomeDisplay: string, formData: Record<string, string>): Promise<Blob> {
-    const res = await fetch("http://localhost:5124/documentos/gerar/", {
+    const res = await fetch("http://localhost/api/documents/documentos/gerar/", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        ...getAuthHeaders()  
+      },
       body: JSON.stringify({ templateId, nomeDisplay, campos: formData }),
     });
   
@@ -53,8 +61,9 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
     formData.append("descricao", data.descricao);
     formData.append("arquivo", data.arquivo);
   
-    const response = await fetch("http://localhost:5124/documentos/upload-template", {
+    const response = await fetch("http://localhost/api/documents/documentos/upload-template", {
       method: "POST",
+      headers: getAuthHeaders(),
       body: formData,
     });
   
@@ -62,10 +71,12 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
       throw new Error("Falha ao enviar o template.");
     }
   }
+  
 
   export async function deletarTemplate(id: number): Promise<void> {
-    const response = await fetch(`http://localhost:5124/templates/${id}`, {
+    const response = await fetch(`http://localhost/api/documents/templates/${id}`, {
       method: "DELETE",
+      headers: getAuthHeaders(),
     });
 
     if (!response.ok) {

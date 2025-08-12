@@ -28,7 +28,7 @@ public class DownloadDocumento : EndpointWithoutRequest
         
         if (documento == null)
         {
-            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            await Send.ErrorsAsync(StatusCodes.Status404NotFound, ct);
             return;
         }
 
@@ -36,11 +36,11 @@ public class DownloadDocumento : EndpointWithoutRequest
         
         if (!fileInfo.Exists)
         {
-            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            await Send.ErrorsAsync(StatusCodes.Status404NotFound, ct);
             return;
         }
 
-        await SendFileAsync(fileInfo, cancellation: ct);
+        await Send.FileAsync(fileInfo, cancellation: ct);
     }
     
 }

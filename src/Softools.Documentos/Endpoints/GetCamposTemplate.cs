@@ -52,6 +52,6 @@ public class GetCamposTemplate : Endpoint<GetCamposTemplateRequest, CamposDto>
             Campos = campos.ToArray()
         };
 
-        await Send.OkAsync(campos, cancellation: ct);
+        await Send.OkAsync(result, cancellation: ct);
     }
 }

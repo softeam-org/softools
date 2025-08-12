@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import "@/app/ui/global.css";
 import type { DocumentoDto } from "@/lib/dtos/document.dto.ts";
-import { downloadDocumento, fetchDocumentos } from "@/lib/services/document.service.ts";
+import { downloadDocumento, fetchDocumentos } from "@/lib/services/document.service";
 
 export default function DocumentoListPage() {
   const [documentos, setDocumentos] = useState<DocumentoDto[]>([]);

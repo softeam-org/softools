@@ -1,8 +1,11 @@
 import { DocumentoDto } from "../dtos/document.dto";
+import { getAuthHeaders } from "./auth.service";
 
 export async function fetchDocumentos(): Promise<DocumentoDto[]> {
     try {
-      const response = await fetch("http://localhost:5124/documentos");
+      const response = await fetch("http://localhost/api/documents/documentos", {
+        headers: getAuthHeaders(),
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch templates");
       }
@@ -16,7 +19,9 @@ export async function fetchDocumentos(): Promise<DocumentoDto[]> {
 
   export async function downloadDocumento(id: number, nome: string): Promise<void> {
     try {
-      const response = await fetch(`http://localhost:5124/documentos/download/${id}`);
+      const response = await fetch(`http://localhost/api/documents/documentos/download/${id}`, {
+        headers: getAuthHeaders(),
+      });
       if (!response.ok) {
         throw new Error("Failed to download documento");
       }
