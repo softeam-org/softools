@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.3.1" />
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -12,10 +12,13 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
-    <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.0.0" />
-    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.0.0" />
-    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.0.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.1" />
+    <PackageReference Include="Aspire.Hosting.Docker" Version="9.4.0-preview.1.25378.8" />
+    <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.3.1" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.3.1" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.3.1" />
+    <PackageReference Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="9.3.1" />
+    <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
   </ItemGroup>
 
 
@@ -25,6 +28,13 @@
     <ProjectReference Include="..\Softools.Gateway\Softools.Gateway.csproj" />
     <ProjectReference Include="..\Softools.Projetos\Softools.Projetos.csproj" />
     <ProjectReference Include="..\Softools.Usuarios\Softools.Usuarios.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Reference Include="Yarp.ReverseProxy">
+      <HintPath>..\..\..\..\.nuget\packages\yarp.reverseproxy\2.3.0\lib\net8.0\Yarp.ReverseProxy.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

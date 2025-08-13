@@ -8,5 +8,12 @@ public class Utils
         Directory.CreateDirectory(path); // ensure it exists
         return path;
     }
+    
+    public static string GetGeneratedFolderPath()
+    {
+        var path = Path.Combine(AppContext.BaseDirectory, "generated");
+        Directory.CreateDirectory(path); // ensure it exists
+        return path;
+    }
 
 }

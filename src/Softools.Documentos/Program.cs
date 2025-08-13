@@ -3,10 +3,13 @@ using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Softools.Documentos;
+using Softools.Documentos.Services;
+using Softools.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<TemplateService>();
 
 // Setup para integração com Aspire
 builder.AddServiceDefaults();
@@ -18,16 +21,19 @@ builder.Services.AddFastEndpoints()
 builder.Services.AddDbContext<DocumentosDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("documentosdb")));
 
-var app = builder.Build();
 
+var app = builder.Build();
+app.UseServiceDefaults();
 // Middlewares
-app.UseFastEndpoints();
+app.UseAuthentication()
+    .UseAuthorization()
+    .UseFastEndpoints();
 
 // Documentação
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi(c => c.Path = "documentos/openapi/{documentName}.json");
-    app.MapScalarApiReference("/documentos/docs", c =>
+    app.MapScalarApiReference("/docs", c =>
     {
         c.OpenApiRoutePattern = "documentos/openapi/{documentName}.json";
     });

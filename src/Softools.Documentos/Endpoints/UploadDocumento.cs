@@ -17,7 +17,6 @@ public class UploadDocumento : Endpoint<UploadDocumentoRequest, DocumentoDto>
     public override void Configure()
     {
         Post("/documentos/upload");
-        AllowAnonymous();
         AllowFileUploads();
         Description(x => x
             .Produces<DocumentoDto>(StatusCodes.Status200OK)
@@ -52,11 +51,11 @@ public class UploadDocumento : Endpoint<UploadDocumentoRequest, DocumentoDto>
                 Caminho = documento.Caminho
             };
 
-            await SendAsync(response, cancellation: ct);
+            await Send.OkAsync(response, cancellation: ct);
         }
         else
         {
-            await SendErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
         }
     }
     

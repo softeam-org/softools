@@ -1,16 +1,19 @@
 using System.Text.Json;
 using FastEndpoints.Security;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Tasks.v1;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
-namespace Microsoft.Extensions.Hosting;
+namespace Softools.ServiceDefaults;
 
 // Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
 // This project should be referenced by each service project in your solution.
@@ -33,21 +36,48 @@ public static class Extensions
             // Turn on service discovery by default
             http.AddServiceDiscovery();
         });
-        
-        
+
+
         builder.Services.AddAuthenticationJwtBearer(s =>
             {
-                s.SigningKey = Environment.GetEnvironmentVariable("JwtSecret") ??
-                               throw new ArgumentNullException("JwtSecret",
-                                   "Could not find jwt secret environment variable");
+                s.SigningKey = Environment.GetEnvironmentVariable("JWT_SECRET") 
+                   ?? throw new InvalidOperationException("JWT Secret não configurado. Defina uma variavel de ambiente JWT_SECRET ou configure");
             })
             .AddAuthorization();
-        
+
+        builder.Services.AddSingleton<GoogleAuthService>();
+        builder.Services.AddSingleton<GoogleCalendarService>();
+        builder.Services.AddSingleton<GoogleTasksService>();
+
         builder.Services.AddProblemDetails();
-        
+
         builder.AddRabbitMQClient("messaging");
+        
+        
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowLocalhost", policy =>
+            {
+                policy.SetIsOriginAllowed(origin =>
+                        !string.IsNullOrEmpty(origin) &&
+                        (origin.StartsWith("http://localhost") || origin.StartsWith("https://localhost")))
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
 
         return builder;
+    }
+    
+    public static WebApplication UseServiceDefaults(this WebApplication app)
+    {
+        // Enable CORS for localhost
+        app.UseCors("AllowLocalhost");
+
+        // Enable health checks
+        app.MapDefaultEndpoints();
+
+        return app;
     }
 
     public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
@@ -131,7 +161,7 @@ public static class Extensions
                     });
                     await context.Response.WriteAsync(result);
                 }
-            });;
+            }); ;
 
             // Only health checks tagged with the "live" tag must pass for app to be considered alive
             app.MapHealthChecks("/alive", new HealthCheckOptions
@@ -139,6 +169,26 @@ public static class Extensions
                 Predicate = r => r.Tags.Contains("live")
             });
         }
+
+        return app;
+    }
+    
+    public static async Task<WebApplication> UseDefaultServicesAsync(this WebApplication app) 
+    {
+        using var scope = app.Services.CreateScope();
+        var authService = scope.ServiceProvider.GetRequiredService<GoogleAuthService>();
+        var calendarService = scope.ServiceProvider.GetRequiredService<GoogleCalendarService>();
+        var tasksService = scope.ServiceProvider.GetRequiredService<GoogleTasksService>();
+        
+        // Initialize Google services
+        await authService.AuthorizeAsync(
+        [
+            CalendarService.Scope.Calendar,
+            TasksService.Scope.Tasks
+        ]);
+        
+        await calendarService.InitializeAsync();
+        await tasksService.InitializeAsync();
 
         return app;
     }

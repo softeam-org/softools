@@ -1,0 +1,116 @@
+services:
+  postgres:
+    image: postgres:14
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  pgweb:
+    image: sosedoff/pgweb
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  auth:
+    build:
+      context: ./src
+      dockerfile: Softools.Auth/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  documentos:
+    build:
+      context: ./src
+      dockerfile: Softools.Documentos/Dockerfile
+
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+  projetos:
+    build:
+      context: ./src
+      dockerfile: Softools.Projetos/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  usuarios:
+    build:
+      context: ./src
+      dockerfile: Softools.Usuarios/Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  frontend:
+    build:
+      context: ./src/softools.website
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth
+      - documentos
+      - projetos
+      - usuarios
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - auth
+      - documentos
+      - projetos
+      - usuarios
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    env_file:
+      - .env
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE}
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=${N8N_POSTGRES_HOST}
+      - DB_POSTGRESDB_PORT=${N8N_POSTGRES_PORT}
+      - DB_POSTGRESDB_DATABASE=${N8N_POSTGRES_DATABASE}
+      - DB_POSTGRESDB_USER=${N8N_POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=${N8N_POSTGRES_PASSWORD}
+      - EXECUTIONS_DATA_PRUNE=${N8N_EXECUTIONS_DATA_PRUNE}
+      - EXECUTIONS_DATA_MAX_AGE=${N8N_EXECUTIONS_DATA_MAX_AGE}
+      - N8N_PORT=5678
+      - NODE_ENV=production
+    volumes:
+      - n8n_data:/home/node/.n8n
+volumes:
+  pgdata:
+  n8n_data:

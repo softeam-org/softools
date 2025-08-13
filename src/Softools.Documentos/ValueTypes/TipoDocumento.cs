@@ -5,4 +5,5 @@ public enum TipoDocumento
     Outro,
     Contrato,
     TermoDeCompromisso,
+    Gerado,
 }
