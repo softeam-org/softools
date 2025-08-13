@@ -1,10 +1,13 @@
 import { CamposDto, TemplateDto } from "@/lib/dtos/template.dto";
 import { getAuthHeaders } from "./auth.service";
 
+const API_DOMAIN = process.env.SERVER_DOMAIN
+  ? `http://${process.env.SERVER_DOMAIN}`
+  : "http://localhost";
 
 export async function fetchTemplates(): Promise<TemplateDto[]> {
     try {
-      const response = await fetch("http://localhost/api/documents/templates", {
+      const response = await fetch(`${API_DOMAIN}/api/documents/templates`, {
               headers: getAuthHeaders(),
             });
       if (!response.ok) {
@@ -20,7 +23,7 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
 
   export async function fetchCampos(id: number): Promise<CamposDto> {
     try {
-      const response = await fetch(`http://localhost/api/documents/templates/campos/${id}`, {
+      const response = await fetch(`${API_DOMAIN}/api/documents/templates/campos/${id}`, {
         headers: getAuthHeaders(),
       });
       if (!response.ok) {
@@ -38,7 +41,7 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
   }
 
   export async function gerarDocumento(templateId: number, nomeDisplay: string, formData: Record<string, string>): Promise<Blob> {
-    const res = await fetch("http://localhost/api/documents/documentos/gerar/", {
+    const res = await fetch(`${API_DOMAIN}/api/documents/documentos/gerar/`, {
       method: "POST",
       headers: { 
         ...getAuthHeaders()  
@@ -61,7 +64,7 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
     formData.append("descricao", data.descricao);
     formData.append("arquivo", data.arquivo);
   
-    const response = await fetch("http://localhost/api/documents/documentos/upload-template", {
+    const response = await fetch(`${API_DOMAIN}/api/documents/documentos/upload-template`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: formData,
@@ -74,7 +77,7 @@ export async function fetchTemplates(): Promise<TemplateDto[]> {
   
 
   export async function deletarTemplate(id: number): Promise<void> {
-    const response = await fetch(`http://localhost/api/documents/templates/${id}`, {
+    const response = await fetch(`${API_DOMAIN}/api/documents/templates/${id}`, {
       method: "DELETE",
       headers: getAuthHeaders(),
     });

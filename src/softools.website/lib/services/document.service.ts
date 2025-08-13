@@ -1,9 +1,13 @@
 import { DocumentoDto } from "../dtos/document.dto";
 import { getAuthHeaders } from "./auth.service";
 
+const API_DOMAIN = process.env.SERVER_DOMAIN
+  ? `http://${process.env.SERVER_DOMAIN}`
+  : "http://localhost";
+
 export async function fetchDocumentos(): Promise<DocumentoDto[]> {
     try {
-      const response = await fetch("http://localhost/api/documents/documentos", {
+      const response = await fetch(`${API_DOMAIN}/api/documents/documentos`, {
         headers: getAuthHeaders(),
       });
       if (!response.ok) {
@@ -19,7 +23,7 @@ export async function fetchDocumentos(): Promise<DocumentoDto[]> {
 
   export async function downloadDocumento(id: number, nome: string): Promise<void> {
     try {
-      const response = await fetch(`http://localhost/api/documents/documentos/download/${id}`, {
+      const response = await fetch(`${API_DOMAIN}/api/documents/documentos/download/${id}`, {
         headers: getAuthHeaders(),
       });
       if (!response.ok) {

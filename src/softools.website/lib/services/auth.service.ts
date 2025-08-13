@@ -1,5 +1,9 @@
 import { AuthResponse } from "../dtos/auth.dto";
 
+const API_DOMAIN = process.env.SERVER_DOMAIN
+  ? `http://${process.env.SERVER_DOMAIN}`
+  : "http://localhost";
+
 export function getAuthHeaders(): HeadersInit {
     const token = localStorage.getItem("token");
     const headers: Record<string, string> = {};
@@ -10,7 +14,7 @@ export function getAuthHeaders(): HeadersInit {
   }
 
   export async function login(email: string, password: string): Promise<AuthResponse> {
-    const response = await fetch("http://localhost/auth/login", {
+    const response = await fetch(`${API_DOMAIN}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -28,7 +32,7 @@ export function getAuthHeaders(): HeadersInit {
   }
   
   export async function register(fullname: string, email: string, password: string): Promise<AuthResponse> {
-    const response = await fetch("http://localhost/auth/register", {
+    const response = await fetch(`${API_DOMAIN}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
