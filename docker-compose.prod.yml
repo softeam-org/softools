@@ -68,6 +68,8 @@ services:
     build:
       context: ./src/softools.website
       dockerfile: Dockerfile
+    env_file:
+      - .prod.env
     environment:
       - NODE_ENV=production
     ports:
