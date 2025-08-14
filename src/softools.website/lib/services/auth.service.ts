@@ -33,11 +33,15 @@ export function getAuthHeaders(): HeadersInit {
     return data;
   }
   
-  export async function register(fullname: string, email: string, password: string): Promise<AuthResponse> {
+  export async function register(
+    fullname: string,
+    email: string,
+    password: string
+  ): Promise<AuthResponse> {
     const response = await fetch(`${API_DOMAIN}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ fullname, email, password }), // <-- include fullname
     });
   
     if (!response.ok) throw new Error("Registration failed");
@@ -50,4 +54,5 @@ export function getAuthHeaders(): HeadersInit {
   
     return data;
   }
+  
   

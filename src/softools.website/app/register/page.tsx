@@ -16,7 +16,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await register(email, password); // se precisar enviar nomeCompleto, adapte a função register
+      await register(nomeCompleto, email, password); // se precisar enviar nomeCompleto, adapte a função register
       window.location.href = "/login"; // redireciona para login após registro
     } catch {
       setError("Falha ao registrar. Verifique seus dados.");
