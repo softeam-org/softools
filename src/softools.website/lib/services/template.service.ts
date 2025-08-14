@@ -1,9 +1,11 @@
 import { CamposDto, TemplateDto } from "@/lib/dtos/template.dto";
 import { getAuthHeaders } from "./auth.service";
 
-const API_DOMAIN = process.env.SERVER_DOMAIN
-  ? `http://${process.env.SERVER_DOMAIN}`
-  : "http://localhost";
+if (!process.env.NEXT_PUBLIC_SERVER_DOMAIN) {
+  throw new Error("NEXT_PUBLIC_SERVER_DOMAIN is not set");
+}
+const API_DOMAIN = `http://${process.env.NEXT_PUBLIC_SERVER_DOMAIN}`;
+
 
 export async function fetchTemplates(): Promise<TemplateDto[]> {
     try {

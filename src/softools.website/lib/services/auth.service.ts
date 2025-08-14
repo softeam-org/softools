@@ -1,8 +1,10 @@
 import { AuthResponse } from "../dtos/auth.dto";
 
-const API_DOMAIN = process.env.SERVER_DOMAIN
-  ? `http://${process.env.SERVER_DOMAIN}`
-  : "http://localhost";
+if (!process.env.NEXT_PUBLIC_SERVER_DOMAIN) {
+  throw new Error("NEXT_PUBLIC_SERVER_DOMAIN is not set");
+}
+const API_DOMAIN = `http://${process.env.NEXT_PUBLIC_SERVER_DOMAIN}`;
+
 
 export function getAuthHeaders(): HeadersInit {
     const token = localStorage.getItem("token");
@@ -31,11 +33,15 @@ export function getAuthHeaders(): HeadersInit {
     return data;
   }
   
-  export async function register(fullname: string, email: string, password: string): Promise<AuthResponse> {
+  export async function register(
+    fullname: string,
+    email: string,
+    password: string
+  ): Promise<AuthResponse> {
     const response = await fetch(`${API_DOMAIN}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ fullname, email, password }), // <-- include fullname
     });
   
     if (!response.ok) throw new Error("Registration failed");
@@ -48,4 +54,5 @@ export function getAuthHeaders(): HeadersInit {
   
     return data;
   }
+  
   
