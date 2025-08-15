@@ -9,7 +9,7 @@ public class ProjetoResponse
     
     public TipoProjeto Tipo { get; set; }
     public string? Descricao { get; set; }
-    public bool Status { get; set; }
+    public StatusProjeto Status { get; set; }
     public DateOnly DataInicio { get; set; }
     public DateOnly DataFim { get; set; }
     public string? LinkContrato { get; set; }

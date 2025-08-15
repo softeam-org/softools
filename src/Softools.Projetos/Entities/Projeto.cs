@@ -9,7 +9,7 @@ public class Projeto
     public Projeto()
     {
         Id = Guid.NewGuid();
-        Status = true;
+        Status = StatusProjeto.NaoIniciado;
     }
     
     
@@ -21,7 +21,7 @@ public class Projeto
     public TipoProjeto Tipo { get; set; }
     
     public string? Descricao { get; set; }
-    public bool Status {get; set;}
+    public StatusProjeto Status {get; set;}
     
     public DateOnly DataInicio{get; set;}
     
