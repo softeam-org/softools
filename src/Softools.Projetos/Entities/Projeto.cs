@@ -13,13 +13,15 @@ public class Projeto
     
     public Guid Id { get; init; }
     
-    public string Nome { get; set; } = String.Empty;
+    public string Nome { get; set; }
     
-    public string Descricao { get; set; } = String.Empty;
+    public string Descricao { get; set; }
     public bool Status {get; set;}
     
     public DateOnly DataInicio{get; set;}
     
     public DateOnly DataFim{get; set;}
+    
+    public string LinkContrato {get; set;} 
     
 }
