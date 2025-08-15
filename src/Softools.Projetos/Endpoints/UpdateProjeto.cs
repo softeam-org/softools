@@ -41,6 +41,7 @@ public class UpdateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
         projeto.DataInicio = req.DataInicio;
         projeto.DataFim = req.DataFim;
         projeto.Status = req.Status;
+        projeto.LinkContrato =req.LinkContrato;
         
         await _context.SaveChangesAsync(ct);
         
@@ -51,7 +52,8 @@ public class UpdateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
             Descricao = projeto.Descricao,
             DataInicio = projeto.DataInicio,
             DataFim = projeto.DataFim,
-            Status = projeto.Status
+            Status = projeto.Status,
+            LinkContrato =  projeto.LinkContrato
         };
 
         await SendAsync(response, cancellation: ct);

@@ -33,5 +33,13 @@ public class ProjetoService
         }
         
     }
+
+    public async Task<List<Projeto>> BuscarProjetosSemLinkContrato()
+    {
+        return await _context.Projetos
+            .Where(p => p.LinkContrato == null)
+            .ToListAsync();
+    }
+    
     
 }

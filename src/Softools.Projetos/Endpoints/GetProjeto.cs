@@ -38,6 +38,7 @@ public class GetProjeto : Endpoint<GetProjetoByIdRequest ,ProjetoResponse>
                 Status = u.Status,
                 DataInicio = u.DataInicio,
                 DataFim = u.DataFim,
+                LinkContrato = u.LinkContrato
 
             })
             .FirstOrDefaultAsync(ct);
