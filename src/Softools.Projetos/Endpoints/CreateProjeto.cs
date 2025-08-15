@@ -29,9 +29,11 @@ public class CreateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
         var projeto = new Projeto
         {
             Nome = req.Nome,
+            Tipo = req.Tipo,
             Descricao = req.Descricao,
             DataInicio = req.DataInicio,
             DataFim = req.DataFim,
+            LinkContrato = req.LinkContrato
         };
         
         await _context.Projetos.AddAsync(projeto, ct);
@@ -44,7 +46,8 @@ public class CreateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
             Descricao = projeto.Descricao,
             DataInicio = projeto.DataInicio,
             DataFim = projeto.DataFim,
-            Status = projeto.Status
+            Status = projeto.Status,
+            LinkContrato = projeto.LinkContrato
         };
         
         await Send.CreatedAtAsync("/projetos/{id}", new { id = projeto.Id }, response, cancellation: ct);

@@ -33,10 +33,12 @@ public class GetProjeto : Endpoint<GetProjetoByIdRequest ,ProjetoResponse>
             {
                 Id = u.Id,
                 Nome = u.Nome,
+                Tipo = u.Tipo,
                 Descricao = u.Descricao,
                 Status = u.Status,
                 DataInicio = u.DataInicio,
                 DataFim = u.DataFim,
+                LinkContrato = u.LinkContrato
 
             })
             .FirstOrDefaultAsync(ct);
