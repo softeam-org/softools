@@ -30,9 +30,11 @@ public class CreateProjeto : Endpoint<ProjetoRequest, ProjetoResponse>
         var projeto = new Projeto
         {
             Nome = req.Nome,
+            Tipo = req.Tipo,
             Descricao = req.Descricao,
             DataInicio = req.DataInicio,
             DataFim = req.DataFim,
+            LinkContrato = req.LinkContrato
         };
         
         await _context.Projetos.AddAsync(projeto, ct);
