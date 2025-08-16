@@ -30,6 +30,8 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
     public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
     {
         var user = await _context.UserCredentials
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.Email == req.Email, cancellationToken: ct);
         
         if (user is null)
@@ -45,13 +47,7 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
             return;
         }
         
-        var jwtToken = JwtBearer.CreateToken(o =>
-        {
-            o.SigningKey = Environment.GetEnvironmentVariable("JWT_SECRET")
-                           ?? throw new InvalidOperationException("JWT Secret não configurado. Defina uma variavel de ambiente JWT_SECRET ou configure");
-            o.ExpireAt = DateTime.UtcNow.AddDays(1);
-            o.User.Claims.Add(("Email", req.Email));
-        });
+        var jwtToken = JwtHelper.GenerateToken(user);
         
         var response = new LoginResponse
         {
