@@ -40,12 +40,20 @@ public static class Extensions
 
         builder.Services.AddAuthenticationJwtBearer(s =>
             {
-                s.SigningKey = Environment.GetEnvironmentVariable("JWT_SECRET") 
-                   ?? throw new InvalidOperationException("JWT Secret não configurado. Defina uma variavel de ambiente JWT_SECRET ou configure");
+                s.SigningKey = Environment.GetEnvironmentVariable("JWT_SECRET")
+                               ?? throw new InvalidOperationException(
+                                   "JWT Secret não configurado. Defina uma variavel de ambiente JWT_SECRET ou configure");
             })
-            .AddAuthorization();
+            .AddAuthorization(o =>
+            {
+                o.AddPolicy("superuser", p =>
+                {
+                    p.RequireAuthenticatedUser();
+                    p.RequireRole("Diretor", "Presidente");
+                });
+            });
 
-        builder.Services.AddSingleton<GoogleAuthService>();
+    builder.Services.AddSingleton<GoogleAuthService>();
         builder.Services.AddSingleton<GoogleCalendarService>();
         builder.Services.AddSingleton<GoogleTasksService>();
 

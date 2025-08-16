@@ -43,13 +43,7 @@ public class RegisterEndpoint : Endpoint<RegisterRequest>
 
         _context.UserCredentials.Add(user);
         await _context.SaveChangesAsync(ct);
-        var jwtToken = JwtBearer.CreateToken(o =>
-        {
-            o.SigningKey = Environment.GetEnvironmentVariable("JWT_SECRET")
-                ?? throw new InvalidOperationException("JWT Secret não configurado. Defina uma variavel de ambiente JWT_SECRET ou configure");
-            o.ExpireAt = DateTime.UtcNow.AddDays(1);
-            o.User.Claims.Add(("Email", req.Email));
-        });
+        var jwtToken = JwtHelper.GenerateToken(user);
 
         await Send.OkAsync(
             new
