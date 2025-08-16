@@ -14,7 +14,7 @@ public class ApproveEndpoint : EndpointWithoutRequest
 
     public override void Configure()
     {
-        Post("/auth/approve/{Id}");
+        Post("/approve/{Id}");
         Policies("superuser");
         Description(x => x
             .WithTags("Auth")

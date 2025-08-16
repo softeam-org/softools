@@ -15,7 +15,7 @@ public class AssignRoleEndpoint : Endpoint<AssignRoleRequest>
     
     public override void Configure()
     {
-        Post("/auth/assign-role");
+        Post("/assign-role");
         Policies("superuser");
         Description(x => x
             .WithTags("Auth")

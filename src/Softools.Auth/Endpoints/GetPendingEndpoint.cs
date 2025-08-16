@@ -13,7 +13,7 @@ public class GetPendingEndpoint : EndpointWithoutRequest<List<UserCredentials>>
     }
     public override void Configure()
     {
-        Get("/auth/pending");
+        Get("pending");
         Policies("superuser");
         Description(x => x
             .WithTags("Auth")
