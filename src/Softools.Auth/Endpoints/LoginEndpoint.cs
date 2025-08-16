@@ -34,7 +34,7 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
             .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.Email == req.Email, cancellationToken: ct);
         
-        if (user is null)
+        if (user is null || !user.IsApproved)
         {
             await Send.UnauthorizedAsync(ct);
             return;
